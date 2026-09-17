@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جلسه پنجم | عبارت‌های شرطی if در پایتون</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink: #ff6fa5;
+    --purple: #8b5cf6;
+    --purple-dark: #6d28d9;
+    --bg: #fdf6fb;
+    --card: #ffffff;
+    --ink: #34213d;
+    --muted: #7a6a85;
+    --code-bg: #2b2140;
+    --code-ink: #f3e8ff;
+    --green: #22c55e;
+    --yellow: #fef3c7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Vazirmatn', sans-serif;
+    background: linear-gradient(180deg, #fff0f7 0%, var(--bg) 300px, var(--bg) 100%);
+    color: var(--ink);
+    line-height: 1.9;
+  }
+  .wrap{max-width: 880px; margin: 0 auto; padding: 24px 20px 80px;}
+
+  header.hero{
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    border-radius: 28px;
+    padding: 40px 30px;
+    text-align:center;
+    color:white;
+    box-shadow: 0 20px 40px -15px rgba(139,92,246,0.5);
+    margin-bottom: 30px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.hero::before{
+    content:"🌦️🤔🔀✨";
+    position:absolute;
+    font-size: 90px;
+    opacity:0.15;
+    top:-20px;
+    left:-10px;
+    letter-spacing: 20px;
+  }
+  header.hero h1{
+    font-size: 30px;
+    margin: 0 0 8px;
+    font-weight:800;
+  }
+  header.hero p{
+    margin:0;
+    font-size:16px;
+    opacity:0.95;
+  }
+  .badge{
+    display:inline-block;
+    background: rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 5px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+
+  section.card{
+    background: var(--card);
+    border-radius: 22px;
+    padding: 26px 26px;
+    margin-bottom: 22px;
+    box-shadow: 0 6px 20px -10px rgba(139,92,246,0.25);
+    border: 1px solid #f3e6f5;
+  }
+
+  h2.section-title{
+    font-size: 22px;
+    color: var(--purple-dark);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:0;
+    border-bottom: 2px dashed #f0d9f5;
+    padding-bottom: 12px;
+  }
+  h3{
+    color:#a3268a;
+    font-size:17px;
+    margin-bottom:6px;
+  }
+
+  ul, ol{padding-right: 22px; margin: 10px 0;}
+  li{margin-bottom:6px;}
+
+  table{
+    width:100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 14.5px;
+    overflow:hidden;
+    border-radius: 12px;
+  }
+  th, td{
+    padding: 10px 12px;
+    text-align: center;
+    border-bottom: 1px solid #f0e2f4;
+  }
+  th{
+    background: linear-gradient(90deg, #fbeaf6, #f3e8ff);
+    color: var(--purple-dark);
+    font-weight:700;
+  }
+  tr:nth-child(even){ background: #fdf8fd; }
+  td code, th code{ direction: ltr; display:inline-block; }
+
+  .quiz{
+    background: var(--yellow);
+    border-radius: 16px;
+    padding: 16px 18px;
+    border: 1px dashed #f0c94a;
+    margin-top: 12px;
+  }
+  .quiz p{margin:4px 0;}
+
+  .fun-fact{
+    background: linear-gradient(135deg, #fff0f9, #f3e8ff);
+    border-radius: 16px;
+    padding: 16px 18px;
+    border-right: 4px solid var(--pink);
+    margin: 14px 0;
+  }
+  .fun-fact b{color:#c026a3;}
+
+  .recap{
+    background:#f5f3ff;
+    border-radius:16px;
+    padding:14px 18px;
+    border-right:4px solid var(--purple);
+    margin-bottom:8px;
+    font-size:14.5px;
+  }
+  .recap b{color:var(--purple-dark);}
+
+  .code-block{
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 14px;
+    padding: 16px 18px;
+    font-family: 'Courier New', monospace;
+    font-size: 14.5px;
+    direction: ltr;
+    text-align: left;
+    overflow-x:auto;
+    margin: 10px 0;
+    white-space: pre-wrap;
+    line-height:1.7;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+  }
+  .code-block .label{
+    display:block;
+    font-family:'Vazirmatn',sans-serif;
+    direction: rtl;
+    text-align:right;
+    color: #d8b4fe;
+    font-size:12px;
+    margin-bottom:8px;
+    font-weight:600;
+  }
+  .comment{color:#9ca3af;}
+  .kw{color:#fca5f1;}
+  .num-tok{color:#93c5fd;}
+  .op{color:#fbbf24;}
+  .bool-tok{color:#5eead4;}
+  .fn{color:#67e8f9;}
+
+  .output-block{
+    background:#0f172a;
+    color:#4ade80;
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-family:'Courier New', monospace;
+    font-size:14.5px;
+    direction: ltr;
+    text-align:left;
+    margin: -4px 0 12px;
+    white-space: pre-wrap;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+  }
+  .output-block .label{
+    display:block;
+    font-family:'Vazirmatn',sans-serif;
+    direction: rtl;
+    text-align:right;
+    color:#94a3b8;
+    font-size:12px;
+    margin-bottom:6px;
+    font-weight:600;
+  }
+
+  .tip{
+    background:#ecfdf5;
+    border-right:4px solid var(--green);
+    border-radius:12px;
+    padding:12px 16px;
+    font-size:14.5px;
+    margin:12px 0;
+  }
+  .tip b{color:#16a34a;}
+
+  .warn{
+    background:#fff1f2;
+    border-right:4px solid #fb7185;
+    border-radius:12px;
+    padding:12px 16px;
+    font-size:14.5px;
+    margin:12px 0;
+  }
+  .warn b{color:#e11d48;}
+
+  .activity{
+    background: linear-gradient(135deg,#eef2ff,#fdf4ff);
+    border: 2px dashed var(--purple);
+    border-radius:18px;
+    padding:18px 20px;
+    margin:16px 0;
+  }
+  .activity h3{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--purple-dark);
+  }
+
+  .homework{
+    background: linear-gradient(135deg, #fff7ed, #fef3c7);
+    border: 2px solid #fbbf24;
+    border-radius: 22px;
+    padding: 22px 24px;
+  }
+  .homework h2.section-title{ color:#b45309; border-bottom-color:#fde68a; }
+  .homework h3{ color:#b45309; }
+  .homework .task{
+    background:white;
+    border-radius:14px;
+    padding:14px 18px;
+    margin-bottom:12px;
+    border-right:4px solid #f59e0b;
+  }
+  .homework .task b{color:#92400e;}
+
+  .indent-note{
+    background:#fefce8;
+    border:1px dashed #eab308;
+    border-radius:12px;
+    padding:12px 16px;
+    font-size:14px;
+    margin:12px 0;
+  }
+  .indent-note b{color:#a16207;}
+
+  footer{
+    text-align:center;
+    color: var(--muted);
+    font-size:13px;
+    margin-top:30px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="badge">جلسه ۵ از دوره پایتون 🐍</span>
+    <h1>عبارت‌های شرطی: if، elif و else</h1>
+    <p>جزوه‌ی درسی</p>
+  </header>
+
+  <section class="card">
+    <h2 class="section-title">🔁 یادآوری کوتاه از جلسه‌ی قبل</h2>
+    <div class="recap">
+      یادته با <b>عملگرهای مقایسه‌ای</b> مثل <code style="direction:ltr;display:inline-block;">==</code> و <code style="direction:ltr;display:inline-block;">&gt;=</code> آشنا شدیم؟ حاصل این مقایسه‌ها همیشه <code style="direction:ltr;display:inline-block;">True</code> یا <code style="direction:ltr;display:inline-block;">False</code> بود.
+    </div>
+    <div class="code-block"><span class="label">مرور سریع</span><span class="num-tok">7</span> == <span class="num-tok">7</span>      <span class="comment"># True</span>
+age &gt;= <span class="num-tok">18</span>   <span class="comment"># False if age is 15</span></div>
+    <div class="code-block"><span class="label">و می‌تونستیم نتیجه رو داخل متغیر ذخیره کنیم</span>a = <span class="num-tok">7</span>==<span class="num-tok">7</span>
+<span class="kw">print</span>(a)</div>
+    <div class="output-block"><span class="label">خروجی</span>True</div>
+    <p>حالا سوال اینجاست: بعد از اینکه فهمیدیم یک چیزی <code style="direction:ltr;display:inline-block;">True</code> هست یا <code style="direction:ltr;display:inline-block;">False</code>، چطور می‌تونیم بر اساسش <b>تصمیم بگیریم</b>؟ اینجاست که <code style="direction:ltr;display:inline-block;">if</code> وارد می‌شه! 🚀</p>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">🤔 عبارت شرطی if چیه؟</h2>
+    <p><code style="direction:ltr;display:inline-block;">if</code> به پایتون می‌گه: «فقط اگه این شرط درست بود، این کار رو انجام بده». دقیقاً مثل تصمیم‌های روزمره‌ی خودمون: «اگه بارونی بود، چتر بردار».</p>
+
+    <div class="code-block"><span class="label">کد</span>age = <span class="fn">int</span>(<span class="kw">input</span>(<span class="op">"how old are you"</span>))
+<span class="kw">if</span> age &gt; <span class="num-tok">6</span>:
+  <span class="kw">print</span>(<span class="op">"you are 6 or more"</span>)</div>
+    <div class="output-block"><span class="label">خروجی نمونه (وقتی کاربر 9 وارد می‌کنه)</span>how old are you9
+you are 6 or more</div>
+
+    <h3>🔍 قوانین نوشتن if</h3>
+    <ul>
+      <li>بعد از شرط، حتماً یک <b>دونقطه ( : )</b> می‌ذاریم.</li>
+      <li>خط بعدی که داخل شرط اجرا می‌شه، باید یک <b>تورفتگی (indent)</b> داشته باشه — یعنی چند فاصله یا یک Tab از سمت چپ فاصله بگیره.</li>
+      <li>اگه شرط <code style="direction:ltr;display:inline-block;">False</code> باشه، خط داخل <code style="direction:ltr;display:inline-block;">if</code> اصلاً اجرا نمی‌شه.</li>
+    </ul>
+
+    <div class="indent-note">
+      📐 <b>نکته‌ی مهم درباره‌ی تورفتگی:</b> توی پایتون، تورفتگی فقط یک سلیقه نیست — بخشی از قوانین زبانه! اگه فراموشش کنی، پایتون خطا می‌ده. همیشه بعد از <code style="direction:ltr;display:inline-block;">:</code> یک تورفتگی یکسان (معمولاً ۴ فاصله) بذار.
+    </div>
+
+    <div class="fun-fact">
+      🎯 <b>کجا به کارمون میاد؟</b> هر بازی، اپلیکیشن یا سایتی که می‌شناسی پر از <code style="direction:ltr;display:inline-block;">if</code> هست: «اگه رمز درست بود وارد شو»، «اگه جونت صفر شد بازی تموم شد»، «اگه سبد خرید خالی بود دکمه رو غیرفعال کن».
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">🌿 if تودرتو (Nested if)</h2>
+    <p>می‌تونیم داخل یک <code style="direction:ltr;display:inline-block;">if</code>، یک <code style="direction:ltr;display:inline-block;">if</code> دیگه هم بذاریم. به این کار <b>شرط تودرتو</b> می‌گیم.</p>
+
+    <div class="code-block"><span class="label">کد</span>age = <span class="fn">int</span>(<span class="kw">input</span>(<span class="op">"how old are you"</span>))
+
+<span class="kw">if</span> age == <span class="num-tok">5</span>:
+  <span class="kw">print</span>(<span class="op">"you are 5 "</span>)
+  height = <span class="fn">int</span>(<span class="kw">input</span>(<span class="op">"how tall are you? "</span>))
+  <span class="kw">if</span> (height &gt; <span class="num-tok">140</span>):
+    <span class="kw">print</span>(<span class="op">"wow! "</span>)
+
+<span class="kw">elif</span> age == <span class="num-tok">6</span>:
+  <span class="kw">print</span>(<span class="op">"you are 6"</span>)</div>
+
+    <div class="output-block"><span class="label">خروجی نمونه (سن = 5 و قد = 150)</span>how old are you5
+you are 5 
+how tall are you? 150
+wow! </div>
+
+    <h3>🔍 این کد چیکار می‌کنه؟</h3>
+    <ul>
+      <li>اول بررسی می‌کنه سن دقیقاً ۵ هست یا نه.</li>
+      <li>اگه بله، وارد بلوک <code style="direction:ltr;display:inline-block;">if</code> می‌شه، پیام رو چاپ می‌کنه و بعد یک سوال <b>دیگه</b> می‌پرسه (قد).</li>
+      <li>این سوال جدید داخل یک <code style="direction:ltr;display:inline-block;">if</code> دیگه بررسی می‌شه — این همون <b>if تودرتو</b> هست، چون یک شرط داخل شرط دیگه‌ست.</li>
+      <li>اگه سن ۵ نبود ولی ۶ بود، می‌ره سراغ بخش <code style="direction:ltr;display:inline-block;">elif</code>.</li>
+    </ul>
+
+    <div class="tip">💡 هر چقدر یک شرط عمیق‌تر (تودرتوتر) بشه، تورفتگیش هم بیشتر می‌شه. برای همینه که مرتب نگه‌داشتن تورفتگی‌ها توی پایتون خیلی مهمه!</div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">🔀 ساختار کامل: if، elif، else</h2>
+    <p>وقتی بیشتر از دو حالت داریم، از <code style="direction:ltr;display:inline-block;">elif</code> (مخفف else if) و <code style="direction:ltr;display:inline-block;">else</code> استفاده می‌کنیم.</p>
+
+    <div class="code-block"><span class="label">ساختار کلی</span><span class="kw">if</span> condition:
+    <span class="comment"># block 1</span>
+<span class="kw">elif</span> other_condition:
+    <span class="comment"># block 2</span>
+<span class="kw">else</span>:
+    <span class="comment"># block 3</span></div>
+
+    <table>
+      <tr><th>بخش</th><th>کِی اجرا می‌شه؟</th></tr>
+      <tr><td><code>if</code></td><td>وقتی شرط اول درست باشه</td></tr>
+      <tr><td><code>elif</code></td><td>وقتی شرط اول غلط بود ولی این شرط درسته (می‌تونیم چند تا <code>elif</code> پشت‌سرهم بذاریم)</td></tr>
+      <tr><td><code>else</code></td><td>وقتی هیچ‌کدوم از شرط‌های بالا درست نبودن</td></tr>
+    </table>
+
+    <p>پایتون این بلوک‌ها رو از بالا به پایین بررسی می‌کنه و به محض اینکه یکی از شرط‌ها درست باشه، همون بلوک رو اجرا می‌کنه و از بقیه رد می‌شه.</p>
+
+    <div class="fun-fact">
+      🎯 <b>مثال از زندگی واقعی:</b> «اگه نمره‌ت بالای ۱۸ بود، عالیه؛ وگرنه اگه بالای ۱۰ بود، قبولی؛ در غیر این صورت، باید بیشتر تلاش کنی.» این دقیقاً همون <code style="direction:ltr;display:inline-block;">if / elif / else</code> است!
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">🌂 مثال‌های تمرینی کلاس</h2>
+    <p>این‌ها مثال‌هایی هستن که توی کلاس با هم روی if کار کردیم:</p>
+
+    <h3>مثال ۱: چتر لازمه؟</h3>
+    <div class="code-block"><span class="label">کد</span>is_rainy = <span class="bool-tok">False</span>
+
+a = <span class="num-tok">12</span>
+b = <span class="num-tok">12</span>
+
+<span class="kw">if</span>(a==b):
+    <span class="kw">print</span>(<span class="op">"umbrella"</span>)</div>
+    <div class="output-block"><span class="label">خروجی</span>umbrella</div>
+    <p>چون <code style="direction:ltr;display:inline-block;">a</code> و <code style="direction:ltr;display:inline-block;">b</code> هر دو ۱۲ هستن، شرط <code style="direction:ltr;display:inline-block;">a==b</code> درست (True) می‌شه و پیام چاپ می‌شه.</p>
+
+    <h3>مثال ۲: بزرگ یا کوچک؟</h3>
+    <div class="code-block"><span class="label">کد</span>age = <span class="fn">int</span>(<span class="kw">input</span>(<span class="op">"what is your age?"</span>))
+
+<span class="kw">if</span>(age&gt;<span class="num-tok">18</span>):
+    <span class="kw">print</span>(<span class="op">"big"</span>)
+<span class="kw">else</span>:
+    <span class="kw">print</span>(<span class="op">"small"</span>)</div>
+    <div class="output-block"><span class="label">خروجی نمونه (سن = 15)</span>what is your age?15
+small</div>
+
+    <h3>مثال ۳: زوج یا فرد — این بار با if!</h3>
+    <p>یادته توی جلسه‌ی دوم با <code style="direction:ltr;display:inline-block;">%</code> باقی‌مانده رو حساب کردیم؟ حالا می‌تونیم با <code style="direction:ltr;display:inline-block;">if</code> مستقیم بگیم زوجه یا فرد!</p>
+    <div class="code-block"><span class="label">کد</span>a = <span class="fn">int</span>(<span class="kw">input</span>(<span class="op">"number?"</span>))
+<span class="kw">print</span>(a)
+<span class="kw">if</span>(a%<span class="num-tok">2</span>==<span class="num-tok">0</span>):
+    <span class="kw">print</span>(<span class="op">"zoog"</span>)
+<span class="kw">else</span>:
+    <span class="kw">print</span>(<span class="op">"fard"</span>)</div>
+    <div class="output-block"><span class="label">خروجی نمونه (عدد = 8)</span>number?8
+8
+zoog</div>
+    <div class="tip">💡 <b>مقایسه با جلسه‌ی دوم:</b> قبلاً فقط باقی‌مانده رو چاپ می‌کردیم و خودمون توضیح می‌دادیم «۰ یعنی زوج». حالا با <code style="direction:ltr;display:inline-block;">if</code> برنامه خودش تصمیم می‌گیره و مستقیم می‌گه «zoog» یا «fard»!</div>
+  </section>
+
+  <section class="card homework">
+    <h2 class="section-title">📓 تکلیف جلسه پنجم</h2>
+    <p>این تمرین‌ها رو توی یک فایل پایتون بنویس و اجرا کن. تمرکز این جلسه روی <code style="direction:ltr;display:inline-block;">if</code>، <code style="direction:ltr;display:inline-block;">elif</code> و <code style="direction:ltr;display:inline-block;">else</code>ست. 💪</p>
+
+    <div class="task">
+      <b>۱. رمز عبور ساده</b>
+      <p>یک رمز عبور رو داخل کد ذخیره کن (مثلاً <code style="direction:ltr;display:inline-block;">"python123"</code>). از کاربر با <code style="direction:ltr;display:inline-block;">input()</code> رمز بگیر و با <code style="direction:ltr;display:inline-block;">if/else</code> بررسی کن که درسته یا نه، و پیام مناسب چاپ کن.</p>
+    </div>
+
+    <div class="task">
+      <b>۲. نمره‌ی درسی</b>
+      <p>یک نمره از کاربر بگیر (بین ۰ تا ۲۰) و با <code style="direction:ltr;display:inline-block;">if / elif / else</code> بگو: اگه بالای ۱۸ بود «عالی»، اگه بین ۱۰ تا ۱۸ بود «قبول»، در غیر این صورت «مردود».</p>
+    </div>
+
+    <div class="task">
+      <b>۳. رده‌سنی سینما</b>
+      <p>سن کاربر رو بگیر و با <code style="direction:ltr;display:inline-block;">if/elif/else</code> بگو تو کدوم رده‌سنی قرار می‌گیره: زیر ۱۳ سال «کودک»، بین ۱۳ تا ۱۷ سال «نوجوان»، ۱۸ سال به بالا «بزرگسال».</p>
+    </div>
+
+    <div class="task">
+      <b>۴. بزرگ‌ترین عدد بین دو عدد</b>
+      <p>دو عدد از کاربر بگیر و با <code style="direction:ltr;display:inline-block;">if/else</code> بگو کدوم بزرگ‌تره. (چالش اضافه: اگه با هم برابر بودن هم پیام جدا بده — نیاز به یک <code style="direction:ltr;display:inline-block;">elif</code> داری!)</p>
+    </div>
+
+    <div class="task">
+      <b>۵. if تودرتو</b>
+      <p>سن کاربر رو بگیر. اگه سن دقیقاً ۱۴ بود، یک سوال دوم بپرس: «قدت چند سانتی‌متره؟» و اگه قد بالای ۱۶۰ بود پیام «تو بلندقدترین کلاسی!» رو چاپ کن (شبیه مثال قد و سن که توی کلاس دیدیم).</p>
+    </div>
+
+    <div class="task">
+      <b>۶. چالش </b>
+      <p>یک عدد از کاربر بگیر و با ترکیب <code style="direction:ltr;display:inline-block;">if/elif/else</code> و عملگر <code style="direction:ltr;display:inline-block;">%</code> بگو که آیا اون عدد هم بر ۲ بخش‌پذیره و هم بر ۳ (در این صورت «بخش‌پذیر بر هر دو»)، فقط بر ۲ («فقط زوج»)، فقط بر ۳ («فقط بر ۳ بخش‌پذیر»)، یا هیچ‌کدوم («هیچ‌کدوم»).</p>
+    </div>
+  </section>
+
+  <footer>
+    ساخته‌شده برای جلسه‌ی پنجم دوره‌ی پایتون
+  </footer>
+
+</div>
+</body>
+</html>
