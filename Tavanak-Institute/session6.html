@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جلسه ششم | لیست‌ها (Lists) در پایتون</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink: #ff6fa5;
+    --purple: #8b5cf6;
+    --purple-dark: #6d28d9;
+    --bg: #fdf6fb;
+    --card: #ffffff;
+    --ink: #34213d;
+    --muted: #7a6a85;
+    --code-bg: #2b2140;
+    --code-ink: #f3e8ff;
+    --green: #22c55e;
+    --yellow: #fef3c7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Vazirmatn', sans-serif;
+    background: linear-gradient(180deg, #fff0f7 0%, var(--bg) 300px, var(--bg) 100%);
+    color: var(--ink);
+    line-height: 1.9;
+  }
+  .wrap{max-width: 880px; margin: 0 auto; padding: 24px 20px 80px;}
+
+  header.hero{
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    border-radius: 28px;
+    padding: 40px 30px;
+    text-align:center;
+    color:white;
+    box-shadow: 0 20px 40px -15px rgba(139,92,246,0.5);
+    margin-bottom: 30px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.hero::before{
+    content:"📦🧺🔢✨";
+    position:absolute;
+    font-size: 90px;
+    opacity:0.15;
+    top:-20px;
+    left:-10px;
+    letter-spacing: 20px;
+  }
+  header.hero h1{
+    font-size: 30px;
+    margin: 0 0 8px;
+    font-weight:800;
+  }
+  header.hero p{
+    margin:0;
+    font-size:16px;
+    opacity:0.95;
+  }
+  .badge{
+    display:inline-block;
+    background: rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 5px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+
+  section.card{
+    background: var(--card);
+    border-radius: 22px;
+    padding: 26px 26px;
+    margin-bottom: 22px;
+    box-shadow: 0 6px 20px -10px rgba(139,92,246,0.25);
+    border: 1px solid #f3e6f5;
+  }
+
+  h2.section-title{
+    font-size: 22px;
+    color: var(--purple-dark);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:0;
+    border-bottom: 2px dashed #f0d9f5;
+    padding-bottom: 12px;
+  }
+  h3{
+    color:#a3268a;
+    font-size:17px;
+    margin-bottom:6px;
+  }
+
+  ul, ol{padding-right: 22px; margin: 10px 0;}
+  li{margin-bottom:6px;}
+
+  table{
+    width:100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 14.5px;
+    overflow:hidden;
+    border-radius: 12px;
+  }
+  th, td{
+    padding: 10px 12px;
+    text-align: center;
+    border-bottom: 1px solid #f0e2f4;
+  }
+  th{
+    background: linear-gradient(90deg, #fbeaf6, #f3e8ff);
+    color: var(--purple-dark);
+    font-weight:700;
+  }
+  tr:nth-child(even){ background: #fdf8fd; }
+  td code, th code{ direction: ltr; display:inline-block; }
+
+  .quiz{
+    background: var(--yellow);
+    border-radius: 16px;
+    padding: 16px 18px;
+    border: 1px dashed #f0c94a;
+    margin-top: 12px;
+  }
+  .quiz p{margin:4px 0;}
+
+  .fun-fact{
+    background: linear-gradient(135deg, #fff0f9, #f3e8ff);
+    border-radius: 16px;
+    padding: 16px 18px;
+    border-right: 4px solid var(--pink);
+    margin: 14px 0;
+  }
+  .fun-fact b{color:#c026a3;}
+
+  .recap{
+    background:#f5f3ff;
+    border-radius:16px;
+    padding:14px 18px;
+    border-right:4px solid var(--purple);
+    margin-bottom:8px;
+    font-size:14.5px;
+  }
+  .recap b{color:var(--purple-dark);}
+
+  .code-block{
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 14px;
+    padding: 16px 18px;
+    font-family: 'Courier New', monospace;
+    font-size: 14.5px;
+    direction: ltr;
+    text-align: left;
+    overflow-x:auto;
+    margin: 10px 0;
+    white-space: pre-wrap;
+    line-height:1.7;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+  }
+  .code-block .label{
+    display:block;
+    font-family:'Vazirmatn',sans-serif;
+    direction: rtl;
+    text-align:right;
+    color: #d8b4fe;
+    font-size:12px;
+    margin-bottom:8px;
+    font-weight:600;
+  }
+  .comment{color:#9ca3af;}
+  .kw{color:#fca5f1;}
+  .num-tok{color:#93c5fd;}
+  .op{color:#fbbf24;}
+  .bool-tok{color:#5eead4;}
+  .fn{color:#67e8f9;}
+
+  .output-block{
+    background:#0f172a;
+    color:#4ade80;
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-family:'Courier New', monospace;
+    font-size:14.5px;
+    direction: ltr;
+    text-align:left;
+    margin: -4px 0 12px;
+    white-space: pre-wrap;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+  }
+  .output-block .label{
+    display:block;
+    font-family:'Vazirmatn',sans-serif;
+    direction: rtl;
+    text-align:right;
+    color:#94a3b8;
+    font-size:12px;
+    margin-bottom:6px;
+    font-weight:600;
+  }
+
+  .tip{
+    background:#ecfdf5;
+    border-right:4px solid var(--green);
+    border-radius:12px;
+    padding:12px 16px;
+    font-size:14.5px;
+    margin:12px 0;
+  }
+  .tip b{color:#16a34a;}
+
+  .warn{
+    background:#fff1f2;
+    border-right:4px solid #fb7185;
+    border-radius:12px;
+    padding:12px 16px;
+    font-size:14.5px;
+    margin:12px 0;
+  }
+  .warn b{color:#e11d48;}
+
+  .activity{
+    background: linear-gradient(135deg,#eef2ff,#fdf4ff);
+    border: 2px dashed var(--purple);
+    border-radius:18px;
+    padding:18px 20px;
+    margin:16px 0;
+  }
+  .activity h3{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--purple-dark);
+  }
+
+  .homework{
+    background: linear-gradient(135deg, #fff7ed, #fef3c7);
+    border: 2px solid #fbbf24;
+    border-radius: 22px;
+    padding: 22px 24px;
+  }
+  .homework h2.section-title{ color:#b45309; border-bottom-color:#fde68a; }
+  .homework h3{ color:#b45309; margin-top:22px; }
+  .homework .task{
+    background:white;
+    border-radius:14px;
+    padding:14px 18px;
+    margin-bottom:12px;
+    border-right:4px solid #f59e0b;
+  }
+  .homework .task b{color:#92400e;}
+  .homework .task .topics{
+    display:inline-block;
+    background:#fef3c7;
+    color:#92400e;
+    font-size:11.5px;
+    padding:2px 10px;
+    border-radius:999px;
+    margin-right:6px;
+    margin-top:6px;
+  }
+
+  .answers{
+    background: linear-gradient(135deg, #ecfdf5, #f0fdfa);
+    border: 2px solid #34d399;
+    border-radius: 22px;
+    padding: 22px 24px;
+  }
+  .answers h2.section-title{ color:#047857; border-bottom-color:#a7f3d0; }
+  .answers .task{
+    background:white;
+    border-radius:14px;
+    padding:14px 18px;
+    margin-bottom:14px;
+    border-right:4px solid #10b981;
+  }
+  .answers .task b{color:#065f46;}
+
+  .index-ruler{
+    display:flex;
+    justify-content:center;
+    gap:0;
+    margin:16px 0;
+    direction: ltr;
+    font-family:'Courier New', monospace;
+    flex-wrap:wrap;
+  }
+  .index-ruler .cell{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin:0 3px;
+  }
+  .index-ruler .letter{
+    background: var(--purple);
+    color:white;
+    min-width:56px;
+    height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    font-size:15px;
+    font-weight:700;
+    padding: 0 6px;
+  }
+  .index-ruler .idx{
+    margin-top:6px;
+    font-size:12px;
+    color: var(--muted);
+    font-family:'Vazirmatn',sans-serif;
+    text-align:center;
+  }
+  .index-ruler .idx .neg{ color:#c026a3; display:block; }
+
+  footer{
+    text-align:center;
+    color: var(--muted);
+    font-size:13px;
+    margin-top:30px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="badge">جلسه ۶ از دوره پایتون 🐍</span>
+    <h1>لیست‌ها (Lists) در پایتون</h1>
+    <p>جزوه‌ی درسی</p>
+  </header>
+
+  <section class="card">
+    <h2 class="section-title">🔁 یادآوری کوتاه از جلسه‌ی قبل</h2>
+    <div class="recap">
+      توی جلسه‌ی قبل با <code style="direction:ltr;display:inline-block;">if</code>، <code style="direction:ltr;display:inline-block;">elif</code> و <code style="direction:ltr;display:inline-block;">else</code> یاد گرفتیم چطور برنامه بر اساس یک شرط تصمیم بگیره. مثلاً:
+    </div>
+    <div class="code-block"><span class="label">مرور سریع</span>a = <span class="num-tok">12</span>
+b = <span class="num-tok">12</span>
+<span class="kw">if</span>(a==b):
+    <span class="kw">print</span>(<span class="op">"umbrella"</span>)</div>
+    <div class="output-block"><span class="label">خروجی</span>umbrella</div>
+    <p>توی این جلسه یک ابزار جدید و خیلی قدرتمند یاد می‌گیریم: <b>لیست (List)</b> — یعنی به‌جای اینکه هر مقدار رو توی یک متغیر جدا نگه داریم، همه رو با هم توی یک جعبه‌ی بزرگ بذاریم. 🎯</p>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">📦 لیست (List) چیه؟</h2>
+    <p>لیست یک ظرف واحده که می‌تونه <b>چند مقدار</b> رو با هم نگه داره — حتی اگه اون مقدارها از نوع‌های مختلف باشن! برخلاف متغیرهای معمولی که فقط یک مقدار داشتن، لیست می‌تونه عدد، رشته، بولی و ... رو با هم نگه داره.</p>
+
+    <div class="code-block"><span class="label">کد</span>a = [<span class="num-tok">1</span>, <span class="num-tok">2</span>, <span class="op">"sara"</span>, <span class="op">"c"</span>, <span class="bool-tok">True</span>]
+<span class="kw">print</span>(a)</div>
+    <div class="output-block"><span class="label">خروجی</span>[1, 2, 'sara', 'c', True]</div>
+
+    <p>می‌بینی که توی یک لیست، هم عدد صحیح (<code style="direction:ltr;display:inline-block;">1</code>, <code style="direction:ltr;display:inline-block;">2</code>) هم رشته (<code style="direction:ltr;display:inline-block;">"sara"</code>, <code style="direction:ltr;display:inline-block;">"c"</code>) و هم مقدار بولی (<code style="direction:ltr;display:inline-block;">True</code>) کنار هم قرار گرفتن. این یکی از نقاط قوت پایتونه!</p>
+
+    <div class="fun-fact">
+      🎯 <b>کجا به کارمون میاد؟</b> لیست دقیقاً مثل یک لیست خرید یا یک صف موسیقیه: می‌تونی هر چقدر خواستی بهش آیتم اضافه کنی و به‌جای ده‌ها متغیر جدا، همه رو با هم مدیریت کنی.
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">🔢 اندیس‌گذاری در لیست (Indexing)</h2>
+    <p>دقیقاً مثل رشته‌ها، توی لیست هم هر عضو یک <b>اندیس (جایگاه)</b> داره که از ۰ شروع می‌شه. علاوه بر این، پایتون به ما اجازه می‌ده از اندیس‌های <b>منفی</b> هم برای شمردن از انتهای لیست استفاده کنیم.</p>
+
+    <div class="code-block"><span class="label">کد</span>a = [<span class="num-tok">1</span>, <span class="num-tok">2</span>, <span class="op">"sara"</span>, <span class="op">"c"</span>, <span class="bool-tok">True</span>]
+<span class="kw">print</span>(a[-<span class="num-tok">1</span>])
+<span class="kw">print</span>(a[-<span class="num-tok">2</span>])
+<span class="kw">print</span>(a[<span class="num-tok">0</span>])</div>
+    <div class="output-block"><span class="label">خروجی</span>True
+c
+1</div>
+
+    <div class="index-ruler">
+      <div class="cell"><div class="letter">1</div><div class="idx">[0]<span class="neg">[-5]</span></div></div>
+      <div class="cell"><div class="letter">2</div><div class="idx">[1]<span class="neg">[-4]</span></div></div>
+      <div class="cell"><div class="letter">"sara"</div><div class="idx">[2]<span class="neg">[-3]</span></div></div>
+      <div class="cell"><div class="letter">"c"</div><div class="idx">[3]<span class="neg">[-2]</span></div></div>
+      <div class="cell"><div class="letter">True</div><div class="idx">[4]<span class="neg">[-1]</span></div></div>
+    </div>
+
+    <div class="tip">💡 <b>نکته‌ی طلایی:</b> اندیس <code style="direction:ltr;display:inline-block;">-1</code> همیشه به <b>آخرین عضو</b> لیست اشاره می‌کنه، <code style="direction:ltr;display:inline-block;">-2</code> به یکی‌مونده‌به‌آخر، و همین‌طور به عقب برمی‌گرده. دیگه لازم نیست طول لیست رو بشماری تا به آخرش برسی!</div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">✂️ برش لیست (Slicing)</h2>
+    <p>می‌تونیم مثل رشته‌ها، یک تکه از لیست رو هم جدا کنیم.</p>
+
+    <div class="code-block"><span class="label">کد</span>a = [<span class="num-tok">1</span>, <span class="num-tok">2</span>, <span class="op">"sara"</span>, <span class="op">"c"</span>, <span class="bool-tok">True</span>, <span class="op">"ava"</span>, <span class="op">" bardia"</span>, <span class="num-tok">3.14</span>]
+
+<span class="kw">print</span>(a[<span class="num-tok">1</span>:])    <span class="comment"># از اندیس 1 تا آخر</span>
+<span class="kw">print</span>(a[<span class="num-tok">2</span>:])    <span class="comment"># از اندیس 2 تا آخر</span>
+<span class="kw">print</span>(a[:<span class="num-tok">4</span>])    <span class="comment"># از اول تا قبل از اندیس 4</span>
+<span class="kw">print</span>(a[<span class="num-tok">1</span>:<span class="num-tok">4</span>])   <span class="comment"># از اندیس 1 تا قبل از اندیس 4</span></div>
+    <div class="output-block"><span class="label">خروجی</span>[2, 'sara', 'c', True, 'ava', ' bardia', 3.14]
+['sara', 'c', True, 'ava', ' bardia', 3.14]
+[1, 2, 'sara', 'c']
+[2, 'sara', 'c']</div>
+
+    <table>
+      <tr><th>نوشتار</th><th>معنی</th></tr>
+      <tr><td><code>a[n:]</code></td><td>از اندیس n تا انتهای لیست</td></tr>
+      <tr><td><code>a[:n]</code></td><td>از ابتدای لیست تا قبل از اندیس n</td></tr>
+      <tr><td><code>a[m:n]</code></td><td>از اندیس m تا قبل از اندیس n</td></tr>
+    </table>
+
+    <div class="warn">⚠️ <b>یادت باشه:</b> درست مثل رشته‌ها، توی برش <code style="direction:ltr;display:inline-block;">[m:n]</code> عضوِ اندیس <code style="direction:ltr;display:inline-block;">n</code> جزو نتیجه نیست!</div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">➕ اضافه کردن عضو با ()append</h2>
+    <p>برای اضافه کردن یک عضو <b>جدید</b> به انتهای لیست، از تابع <code style="direction:ltr;display:inline-block;">append()</code> استفاده می‌کنیم.</p>
+
+    <div class="code-block"><span class="label">کد</span>a = [<span class="num-tok">1</span>, <span class="num-tok">2</span>, <span class="op">"sara"</span>, <span class="op">"c"</span>, <span class="bool-tok">True</span>, <span class="op">"ava"</span>, <span class="op">" bardia"</span>, <span class="num-tok">3.14</span>]
+
+b = a[<span class="num-tok">1</span>:<span class="num-tok">4</span>]
+<span class="kw">print</span>(b)
+
+b.append(<span class="op">"taha"</span>)
+<span class="kw">print</span>(b)</div>
+    <div class="output-block"><span class="label">خروجی</span>[2, 'sara', 'c']
+[2, 'sara', 'c', 'taha']</div>
+
+    <p>می‌بینی که <code style="direction:ltr;display:inline-block;">b</code> اول با برش <code style="direction:ltr;display:inline-block;">a[1:4]</code> ساخته شد، و بعد با <code style="direction:ltr;display:inline-block;">append("taha")</code> یک عضو جدید بهش اضافه کردیم.</p>
+
+    <h3>🔗 ترکیب لیست با if</h3>
+    <p>می‌تونیم از <code style="direction:ltr;display:inline-block;">if</code> برای بررسی یک عضو خاص از لیست هم استفاده کنیم:</p>
+    <div class="code-block"><span class="label">کد</span><span class="kw">if</span>(b[<span class="num-tok">0</span>]==<span class="num-tok">1</span>):
+    b.append(<span class="num-tok">1</span>)
+
+<span class="kw">print</span>(b)</div>
+    <div class="output-block"><span class="label">خروجی (وقتی b[0] برابر 2 است)</span>[2, 'sara', 'c', 'taha']</div>
+    <p>چون عضو اول لیست <code style="direction:ltr;display:inline-block;">b</code> برابر با <code style="direction:ltr;display:inline-block;">2</code> بود نه <code style="direction:ltr;display:inline-block;">1</code>، شرط <code style="direction:ltr;display:inline-block;">False</code> شد و چیزی اضافه نشد. اگه عضو اول <code style="direction:ltr;display:inline-block;">1</code> بود، یک <code style="direction:ltr;display:inline-block;">1</code> دیگه هم به انتهای لیست اضافه می‌شد.</p>
+
+    <div class="fun-fact">
+      🎯 <b>جمع‌بندی این بخش:</b> لیست‌ها + اندیس‌گذاری + برش + <code style="direction:ltr;display:inline-block;">append()</code> + <code style="direction:ltr;display:inline-block;">if</code> با هم ترکیب می‌شن تا بتونی داده‌های واقعی رو مدیریت کنی — دقیقاً همون کاری که برنامه‌های واقعی انجام می‌دن!
+    </div>
+  </section>
+
+  <section class="card answers">
+    <h2 class="section-title">✅ پاسخ تمرین‌های جلسه پنجم</h2>
+    <p>این‌ها نمونه‌پاسخ‌های تکلیف جلسه‌ی قبل هستن که با هم توی کلاس حل کردیم:</p>
+
+    <div class="task">
+      <b>۱. رمز عبور ساده</b>
+      <div class="code-block">correct_password = <span class="op">"python123"</span>
+password = <span class="kw">input</span>(<span class="op">"Enter password: "</span>)
+
+<span class="kw">if</span> password == correct_password:
+    <span class="kw">print</span>(<span class="op">"Access granted"</span>)
+<span class="kw">else</span>:
+    <span class="kw">print</span>(<span class="op">"Wrong password"</span>)</div>
+    </div>
+
+    <div class="task">
+      <b>۲. نمره‌ی درسی</b>
+      <div class="code-block">grade = <span class="fn">int</span>(<span class="kw">input</span>(<span class="op">"Enter your grade: "</span>))
+
+<span class="kw">if</span> grade &gt; <span class="num-tok">18</span>:
+    <span class="kw">print</span>(<span class="op">"Excellent"</span>)
+<span class="kw">elif</span> grade &gt;= <span class="num-tok">10</span>:
+    <span class="kw">print</span>(<span class="op">"Pass"</span>)
+<span class="kw">else</span>:
+    <span class="kw">print</span>(<span class="op">"Fail"</span>)</div>
+    </div>
+
+    <div class="task">
+      <b>۳. رده‌سنی سینما</b>
+      <div class="code-block">age = <span class="fn">int</span>(<span class="kw">input</span>(<span class="op">"Enter your age: "</span>))
+
+<span class="kw">if</span> age &lt; <span class="num-tok">13</span>:
+    <span class="kw">print</span>(<span class="op">"Child"</span>)
+<span class="kw">elif</span> age &lt;= <span class="num-tok">17</span>:
+    <span class="kw">print</span>(<span class="op">"Teen"</span>)
+<span class="kw">else</span>:
+    <span class="kw">print</span>(<span class="op">"Adult"</span>)</div>
+    </div>
+
+    <div class="task">
+      <b>۴. بزرگ‌ترین عدد بین دو عدد</b>
+      <div class="code-block">n1 = <span class="fn">int</span>(<span class="kw">input</span>(<span class="op">"Enter first number: "</span>))
+n2 = <span class="fn">int</span>(<span class="kw">input</span>(<span class="op">"Enter second number: "</span>))
+
+<span class="kw">if</span> n1 == n2:
+    <span class="kw">print</span>(<span class="op">"Equal"</span>)
+<span class="kw">elif</span> n1 &gt; n2:
+    <span class="kw">print</span>(<span class="op">"First is bigger"</span>)
+<span class="kw">else</span>:
+    <span class="kw">print</span>(<span class="op">"Second is bigger"</span>)</div>
+    </div>
+
+    <div class="task">
+      <b>۵. if تودرتو</b>
+      <div class="code-block">age = <span class="fn">int</span>(<span class="kw">input</span>(<span class="op">"Enter your age: "</span>))
+
+<span class="kw">if</span> age == <span class="num-tok">14</span>:
+    height = <span class="fn">int</span>(<span class="kw">input</span>(<span class="op">"How tall are you? "</span>))
+    <span class="kw">if</span> height &gt; <span class="num-tok">160</span>:
+        <span class="kw">print</span>(<span class="op">"You are the tallest in class!"</span>)</div>
+    </div>
+
+    <div class="task">
+      <b>۶. چالش اضافه ⭐</b>
+      <div class="code-block">n = <span class="fn">int</span>(<span class="kw">input</span>(<span class="op">"Enter a number: "</span>))
+
+<span class="kw">if</span> n % <span class="num-tok">2</span> == <span class="num-tok">0</span> and n % <span class="num-tok">3</span> == <span class="num-tok">0</span>:
+    <span class="kw">print</span>(<span class="op">"Divisible by both"</span>)
+<span class="kw">elif</span> n % <span class="num-tok">2</span> == <span class="num-tok">0</span>:
+    <span class="kw">print</span>(<span class="op">"Only even"</span>)
+<span class="kw">elif</span> n % <span class="num-tok">3</span> == <span class="num-tok">0</span>:
+    <span class="kw">print</span>(<span class="op">"Only divisible by 3"</span>)
+<span class="kw">else</span>:
+    <span class="kw">print</span>(<span class="op">"Neither"</span>)</div>
+    </div>
+  </section>
+
+  <section class="card homework">
+    <h2 class="section-title">📓 تکلیف جلسه ششم</h2>
+    <p>این هفته تکلیف بیشتره و بخشی از تمرین‌ها <b>ترکیبی از همه‌ی جلسات قبل</b> هستن (عملگرهای حسابی، مقایسه‌ای، منطقی، رشته‌ها، تبدیل نوع داده، و if). سعی کن همه رو کامل حل کنی. 💪</p>
+
+    <h3>بخش ۱ — تمرین‌های مخصوص لیست</h3>
+
+    <div class="task">
+      <b>۱. لیست میوه‌ها</b>
+      <p>یک لیست از ۵ میوه‌ی مورد علاقه‌ات بساز و کل لیست رو چاپ کن. بعد میوه‌ی اول و میوه‌ی آخر رو با اندیس‌گذاری (یکی با اندیس مثبت و یکی با اندیس منفی) چاپ کن.</p>
+      <span class="topics">لیست‌ها</span><span class="topics">اندیس‌گذاری</span>
+    </div>
+
+    <div class="task">
+      <b>۲. برش لیست</b>
+      <p>یک لیست با ۸ عضو مختلف (عدد، رشته و بولی با هم) بساز. سه عضو وسط لیست رو با <code style="direction:ltr;display:inline-block;">slicing</code> جدا کن و چاپ کن.</p>
+      <span class="topics">لیست‌ها</span><span class="topics">برش</span>
+    </div>
+
+    <div class="task">
+      <b>۳. لیست در حال رشد</b>
+      <p>یک لیست خالی از اسامی دوستانت بساز (<code style="direction:ltr;display:inline-block;">[]</code>) و با <code style="direction:ltr;display:inline-block;">append()</code> سه اسم بهش اضافه کن. بعد از هر <code style="direction:ltr;display:inline-block;">append</code>، لیست رو چاپ کن تا ببینی چطور بزرگ می‌شه.</p>
+      <span class="topics">لیست‌ها</span><span class="topics">append</span>
+    </div>
+
+    <h3>بخش ۲ — تمرین‌های ترکیبی (مرور همه‌ی جلسات)</h3>
+
+    <div class="task">
+      <b>۴. لیست نمرات و بررسی اولین نمره</b>
+      <p>یک لیست از ۵ نمره‌ی درسی (عدد) بساز. با <code style="direction:ltr;display:inline-block;">if</code> بررسی کن که آیا اولین نمره‌ی لیست (<code style="direction:ltr;display:inline-block;">list[0]</code>) بالای ۱۵ هست یا نه، و پیام مناسب چاپ کن.</p>
+      <span class="topics">لیست‌ها</span><span class="topics">if</span><span class="topics">مقایسه</span>
+    </div>
+
+    <div class="task">
+      <b>۵. رشته به لیست حروف</b>
+      <p>یک رشته (مثل اسمت) بگیر و با اندیس‌گذاری، حرف اول و حرف آخرش رو داخل یک لیست جدید بریز (مثلاً <code style="direction:ltr;display:inline-block;">letters = [name[0], name[-1]]</code>) و لیست رو چاپ کن.</p>
+      <span class="topics">رشته‌ها</span><span class="topics">لیست‌ها</span><span class="topics">اندیس‌گذاری</span>
+    </div>
+
+    <div class="task">
+      <b>۶. ماشین‌حساب لیستی</b>
+      <p>یک لیست دو عضوی از دو عدد که کاربر با <code style="direction:ltr;display:inline-block;">input()</code> و <code style="direction:ltr;display:inline-block;">int()</code> وارد می‌کنه بساز (مثلاً <code style="direction:ltr;display:inline-block;">numbers = [n1, n2]</code>). حاصل جمع، تفریق و ضرب <code style="direction:ltr;display:inline-block;">numbers[0]</code> و <code style="direction:ltr;display:inline-block;">numbers[1]</code> رو چاپ کن.</p>
+      <span class="topics">لیست‌ها</span><span class="topics">عملگرهای حسابی</span><span class="topics">تبدیل نوع داده</span>
+    </div>
+
+    <div class="task">
+      <b>۷. بررسی عضویت با شرط ترکیبی</b>
+      <p>یک لیست از سه رنگ مورد علاقه بساز. با عملگر <code style="direction:ltr;display:inline-block;">or</code> بررسی کن که آیا عضو اول لیست برابر <code style="direction:ltr;display:inline-block;">"blue"</code> است یا عضو دوم برابر <code style="direction:ltr;display:inline-block;">"red"</code>، و نتیجه رو با <code style="direction:ltr;display:inline-block;">if</code> چاپ کن.</p>
+      <span class="topics">لیست‌ها</span><span class="topics">منطقی</span><span class="topics">if</span>
+    </div>
+
+    <div class="task">
+      <b>۸. کارت اطلاعات کامل</b>
+      <p>یک لیست به نام <code style="direction:ltr;display:inline-block;">info</code> بساز که این ترتیب رو داشته باشه: [اسم (رشته)، سن (عدد)، قد (اعشاری)، آیا دانش‌آموزه (بولی)]. سپس:</p>
+      <ul>
+        <li>با <code style="direction:ltr;display:inline-block;">print()</code> و اندیس‌گذاری، یک جمله‌ی کامل معرفی با f-string بساز.</li>
+        <li>با <code style="direction:ltr;display:inline-block;">if</code> بررسی کن اگه سن (<code style="direction:ltr;display:inline-block;">info[1]</code>) بالای ۱۳ بود، به لیست رشته‌ی <code style="direction:ltr;display:inline-block;">"teenager"</code> رو با <code style="direction:ltr;display:inline-block;">append()</code> اضافه کن.</li>
+        <li>لیست نهایی رو چاپ کن.</li>
+      </ul>
+      <span class="topics">لیست‌ها</span><span class="topics">رشته‌ها</span><span class="topics">if</span><span class="topics">append</span><span class="topics">f-string</span>
+    </div>
+
+    <div class="task">
+      <b>۹. سوال</b>
+      <p>یک لیست خالی به اسم <code style="direction:ltr;display:inline-block;">even_or_odd</code> بساز. یک عدد از کاربر بگیر و با <code style="direction:ltr;display:inline-block;">%</code> بررسی کن زوجه یا فرد. اگه زوج بود، رشته‌ی <code style="direction:ltr;display:inline-block;">"even"</code> رو با <code style="direction:ltr;display:inline-block;">append()</code> به لیست اضافه کن، وگرنه <code style="direction:ltr;display:inline-block;">"odd"</code> رو. در پایان لیست رو چاپ کن. (راهنمایی: این تمرین ترکیبیه از جلسه‌ی ۲، ۵ و ۶!)</p>
+      <span class="topics">همه‌ی جلسات</span>
+    </div>
+
+    <h3>بخش ۳🎯</h3>
+
+    <div class="task">
+      <b>۱۰. لیست تولد</b>
+      <p>یک لیست به نام <code style="direction:ltr;display:inline-block;">birthday</code> بساز که سه عدد داخلش باشه: روز، ماه، سال تولدت (مثلاً <code style="direction:ltr;display:inline-block;">[14, 6, 2011]</code>). با اندیس‌گذاری و f-string یک جمله چاپ کن که تاریخ تولدت رو نشون بده.</p>
+      <span class="topics">لیست‌ها</span><span class="topics">اندیس‌گذاری</span><span class="topics">f-string</span>
+    </div>
+
+    <div class="task">
+      <b>۱۱. طول لیست با ()len</b>
+      <p>یک لیست از حداقل ۶ کتاب یا فیلم مورد علاقه بساز. با <code style="direction:ltr;display:inline-block;">len()</code> تعداد اعضای لیست رو چاپ کن. بعد با <code style="direction:ltr;display:inline-block;">if</code> بررسی کن که آیا تعداد اعضا بیشتر از ۵ هست یا نه.</p>
+      <span class="topics">لیست‌ها</span><span class="topics">len</span><span class="topics">if</span>
+    </div>
+
+    <div class="task">
+      <b>۱۲. برش دوطرفه</b>
+      <p>یک لیست ۱۰ عضوی از اعداد ۱ تا ۱۰ بساز (می‌تونی دستی تایپشون کنی). با <code style="direction:ltr;display:inline-block;">slicing</code> سه عضو اول رو جدا کن، سه عضو آخر رو هم با اندیس منفی جدا کن، و هر دو رو چاپ کن.</p>
+      <span class="topics">لیست‌ها</span><span class="topics">برش</span><span class="topics">اندیس منفی</span>
+    </div>
+
+    <div class="task">
+      <b>۱۳. append ترکیبی با ورودی کاربر</b>
+      <p>یک لیست خالی به نام <code style="direction:ltr;display:inline-block;">shopping_list</code> بساز. سه بار از کاربر با <code style="direction:ltr;display:inline-block;">input()</code> اسم یک خوراکی بگیر و هر بار با <code style="direction:ltr;display:inline-block;">append()</code> به لیست اضافه کن. در پایان کل لیست خرید رو چاپ کن.</p>
+      <span class="topics">لیست‌ها</span><span class="topics">input</span><span class="topics">append</span>
+    </div>
+
+    <div class="task">
+      <b>۱۴. مقایسه‌ی دو عضو از لیست</b>
+      <p>یک لیست دو عددی از کاربر بساز (هر دو عدد با <code style="direction:ltr;display:inline-block;">input()</code> و <code style="direction:ltr;display:inline-block;">int()</code> گرفته بشن). با <code style="direction:ltr;display:inline-block;">if/elif/else</code> بگو کدوم عضو لیست بزرگ‌تره یا با هم برابرن.</p>
+      <span class="topics">لیست‌ها</span><span class="topics">مقایسه</span><span class="topics">if/elif/else</span>
+    </div>
+
+    <div class="task">
+      <b>۱۵. چالش نهایی — دفترچه‌ی کوچک نمرات ⭐⭐⭐</b>
+      <p>یک لیست خالی به اسم <code style="direction:ltr;display:inline-block;">grades</code> بساز. سه بار از کاربر یک نمره (عدد) بگیر و با <code style="direction:ltr;display:inline-block;">append()</code> به لیست اضافه کن. بعد از هر نمره، با <code style="direction:ltr;display:inline-block;">if</code> بررسی کن که آیا اون نمره بالای ۱۰ هست یا نه و پیام «قبول» یا «مردود» چاپ کن. در پایان کل لیست نمرات رو نمایش بده.</p>
+      <span class="topics">همه‌ی جلسات</span>
+    </div>
+  </section>
+
+  <footer>
+    ساخته‌شده برای جلسه‌ی ششم دوره‌ی پایتون
+  </footer>
+
+</div>
+</body>
+</html>
