@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جلسه هفتم | متدهای لیست و حلقه‌ی while در پایتون</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink: #ff6fa5;
+    --purple: #8b5cf6;
+    --purple-dark: #6d28d9;
+    --bg: #fdf6fb;
+    --card: #ffffff;
+    --ink: #34213d;
+    --muted: #7a6a85;
+    --code-bg: #2b2140;
+    --code-ink: #f3e8ff;
+    --green: #22c55e;
+    --yellow: #fef3c7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Vazirmatn', sans-serif;
+    background: linear-gradient(180deg, #fff0f7 0%, var(--bg) 300px, var(--bg) 100%);
+    color: var(--ink);
+    line-height: 1.9;
+  }
+  .wrap{max-width: 880px; margin: 0 auto; padding: 24px 20px 80px;}
+
+  header.hero{
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    border-radius: 28px;
+    padding: 40px 30px;
+    text-align:center;
+    color:white;
+    box-shadow: 0 20px 40px -15px rgba(139,92,246,0.5);
+    margin-bottom: 30px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.hero::before{
+    content:"🔁🌀⚙️✨";
+    position:absolute;
+    font-size: 90px;
+    opacity:0.15;
+    top:-20px;
+    left:-10px;
+    letter-spacing: 20px;
+  }
+  header.hero h1{
+    font-size: 30px;
+    margin: 0 0 8px;
+    font-weight:800;
+  }
+  header.hero p{
+    margin:0;
+    font-size:16px;
+    opacity:0.95;
+  }
+  .badge{
+    display:inline-block;
+    background: rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 5px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+
+  section.card{
+    background: var(--card);
+    border-radius: 22px;
+    padding: 26px 26px;
+    margin-bottom: 22px;
+    box-shadow: 0 6px 20px -10px rgba(139,92,246,0.25);
+    border: 1px solid #f3e6f5;
+  }
+
+  h2.section-title{
+    font-size: 22px;
+    color: var(--purple-dark);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:0;
+    border-bottom: 2px dashed #f0d9f5;
+    padding-bottom: 12px;
+  }
+  h3{
+    color:#a3268a;
+    font-size:17px;
+    margin-bottom:6px;
+  }
+
+  ul, ol{padding-right: 22px; margin: 10px 0;}
+  li{margin-bottom:6px;}
+
+  table{
+    width:100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 14.5px;
+    overflow:hidden;
+    border-radius: 12px;
+  }
+  th, td{
+    padding: 10px 12px;
+    text-align: center;
+    border-bottom: 1px solid #f0e2f4;
+  }
+  th{
+    background: linear-gradient(90deg, #fbeaf6, #f3e8ff);
+    color: var(--purple-dark);
+    font-weight:700;
+  }
+  tr:nth-child(even){ background: #fdf8fd; }
+  td code, th code{ direction: ltr; display:inline-block; }
+
+  .quiz{
+    background: var(--yellow);
+    border-radius: 16px;
+    padding: 16px 18px;
+    border: 1px dashed #f0c94a;
+    margin-top: 12px;
+  }
+  .quiz p{margin:4px 0;}
+
+  .fun-fact{
+    background: linear-gradient(135deg, #fff0f9, #f3e8ff);
+    border-radius: 16px;
+    padding: 16px 18px;
+    border-right: 4px solid var(--pink);
+    margin: 14px 0;
+  }
+  .fun-fact b{color:#c026a3;}
+
+  .recap{
+    background:#f5f3ff;
+    border-radius:16px;
+    padding:14px 18px;
+    border-right:4px solid var(--purple);
+    margin-bottom:8px;
+    font-size:14.5px;
+  }
+  .recap b{color:var(--purple-dark);}
+
+  .code-block{
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 14px;
+    padding: 16px 18px;
+    font-family: 'Courier New', monospace;
+    font-size: 14.5px;
+    direction: ltr;
+    text-align: left;
+    overflow-x:auto;
+    margin: 10px 0;
+    white-space: pre-wrap;
+    line-height:1.7;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+  }
+  .code-block .label{
+    display:block;
+    font-family:'Vazirmatn',sans-serif;
+    direction: rtl;
+    text-align:right;
+    color: #d8b4fe;
+    font-size:12px;
+    margin-bottom:8px;
+    font-weight:600;
+  }
+  .comment{color:#9ca3af;}
+  .kw{color:#fca5f1;}
+  .num-tok{color:#93c5fd;}
+  .op{color:#fbbf24;}
+  .bool-tok{color:#5eead4;}
+  .fn{color:#67e8f9;}
+
+  .output-block{
+    background:#0f172a;
+    color:#4ade80;
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-family:'Courier New', monospace;
+    font-size:14.5px;
+    direction: ltr;
+    text-align:left;
+    margin: -4px 0 12px;
+    white-space: pre-wrap;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+  }
+  .output-block .label{
+    display:block;
+    font-family:'Vazirmatn',sans-serif;
+    direction: rtl;
+    text-align:right;
+    color:#94a3b8;
+    font-size:12px;
+    margin-bottom:6px;
+    font-weight:600;
+  }
+
+  .tip{
+    background:#ecfdf5;
+    border-right:4px solid var(--green);
+    border-radius:12px;
+    padding:12px 16px;
+    font-size:14.5px;
+    margin:12px 0;
+  }
+  .tip b{color:#16a34a;}
+
+  .warn{
+    background:#fff1f2;
+    border-right:4px solid #fb7185;
+    border-radius:12px;
+    padding:12px 16px;
+    font-size:14.5px;
+    margin:12px 0;
+  }
+  .warn b{color:#e11d48;}
+
+  .danger{
+    background:#450a0a;
+    color:#fecaca;
+    border-radius:16px;
+    padding:16px 18px;
+    margin:14px 0;
+    border: 2px solid #dc2626;
+  }
+  .danger b{color:#fca5a5;}
+
+  .activity{
+    background: linear-gradient(135deg,#eef2ff,#fdf4ff);
+    border: 2px dashed var(--purple);
+    border-radius:18px;
+    padding:18px 20px;
+    margin:16px 0;
+  }
+  .activity h3{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--purple-dark);
+  }
+
+  .homework{
+    background: linear-gradient(135deg, #fff7ed, #fef3c7);
+    border: 2px solid #fbbf24;
+    border-radius: 22px;
+    padding: 22px 24px;
+  }
+  .homework h2.section-title{ color:#b45309; border-bottom-color:#fde68a; }
+  .homework h3{ color:#b45309; margin-top:22px; }
+  .homework .task{
+    background:white;
+    border-radius:14px;
+    padding:14px 18px;
+    margin-bottom:12px;
+    border-right:4px solid #f59e0b;
+  }
+  .homework .task b{color:#92400e;}
+  .homework .task .topics{
+    display:inline-block;
+    background:#fef3c7;
+    color:#92400e;
+    font-size:11.5px;
+    padding:2px 10px;
+    border-radius:999px;
+    margin-right:6px;
+    margin-top:6px;
+  }
+
+  footer{
+    text-align:center;
+    color: var(--muted);
+    font-size:13px;
+    margin-top:30px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="badge">جلسه ۷ از دوره پایتون 🐍</span>
+    <h1>متدهای لیست و حلقه‌ی while</h1>
+    <p>جزوه‌ی درسی </p>
+  </header>
+
+  <section class="card">
+    <h2 class="section-title">🔁 یادآوری کوتاه از جلسه‌ی قبل</h2>
+    <div class="recap">
+      توی جلسه‌ی قبل با <b>لیست‌ها</b> آشنا شدیم: چطور بسازیمشون، باهاشون اندیس‌گذاری و برش انجام بدیم، و یک عضو جدید با <code style="direction:ltr;display:inline-block;">append()</code> بهشون اضافه کنیم. 🎯
+    </div>
+    <p>امروز اول چند تا <b>ابزار جدید برای کار با لیست</b> یاد می‌گیریم، و بعد با یکی از مهم‌ترین مفهوم‌های برنامه‌نویسی آشنا می‌شیم: <b>حلقه‌ی while</b> — یعنی تکرار کردن یک کار تا وقتی که یک شرط برقرار باشه!</p>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">🧰 متدهای پرکاربرد لیست</h2>
+    <p>پایتون یک سری «متد» (توابع مخصوص لیست) در اختیارمون می‌ذاره که کار با لیست رو خیلی راحت‌تر می‌کنه. بیایم با یک مثال، همه‌شون رو مرور کنیم:</p>
+
+    <div class="code-block"><span class="label">لیست شروع</span>a = [<span class="num-tok">12</span>, <span class="num-tok">15</span>, <span class="num-tok">14</span>, <span class="num-tok">12</span>]</div>
+
+    <table>
+      <tr><th>متد</th><th>کاربرد</th><th>مثال</th></tr>
+      <tr><td><code>append(x)</code></td><td>یک عضو به انتهای لیست اضافه می‌کنه</td><td><code>a.append("23")</code></td></tr>
+      <tr><td><code>insert(i, x)</code></td><td>عضو <code>x</code> رو دقیقاً در جایگاه <code>i</code> قرار می‌ده</td><td><code>a.insert(0, "nima")</code></td></tr>
+      <tr><td><code>pop(i)</code></td><td>عضوی که در اندیس <code>i</code> هست رو حذف می‌کنه</td><td><code>a.pop(1)</code></td></tr>
+      <tr><td><code>remove(x)</code></td><td>اولین عضوی که برابر با مقدار <code>x</code> هست رو حذف می‌کنه</td><td><code>a.remove(12)</code></td></tr>
+      <tr><td><code>reverse()</code></td><td>ترتیب اعضای لیست رو برعکس می‌کنه</td><td><code>a.reverse()</code></td></tr>
+      <tr><td><code>sort()</code></td><td>اعضای لیست رو از کوچک به بزرگ مرتب می‌کنه</td><td><code>a.sort()</code></td></tr>
+      <tr><td><code>index(x)</code></td><td>اندیس (جایگاه) اولین بار دیده‌شدنِ <code>x</code> رو برمی‌گردونه</td><td><code>a.index(12)</code></td></tr>
+      <tr><td><code>count(x)</code></td><td>تعداد تکرار <code>x</code> توی لیست رو می‌شمره</td><td><code>a.count(15)</code></td></tr>
+    </table>
+
+    <div class="code-block"><span class="label">مرحله به مرحله روی لیست a = [12, 15, 14, 12]</span>a = [<span class="num-tok">12</span>, <span class="num-tok">15</span>, <span class="num-tok">14</span>, <span class="num-tok">12</span>]
+
+a.append(<span class="op">"23"</span>)
+<span class="kw">print</span>(a)             <span class="comment"># [12, 15, 14, 12, '23']</span>
+
+a.insert(<span class="num-tok">0</span>, <span class="op">"nima"</span>)
+<span class="kw">print</span>(a)             <span class="comment"># ['nima', 12, 15, 14, 12, '23']</span>
+
+a.pop(<span class="num-tok">1</span>)
+<span class="kw">print</span>(a)             <span class="comment"># ['nima', 15, 14, 12, '23']</span>
+
+a.remove(<span class="num-tok">12</span>)
+<span class="kw">print</span>(a)             <span class="comment"># ['nima', 15, 14, '23']</span>
+
+a.reverse()
+<span class="kw">print</span>(a)             <span class="comment"># ['23', 14, 15, 'nima']</span></div>
+
+    <div class="warn">⚠️ <b>نکته درباره‌ی ()sort:</b> اگه لیست شامل چند نوع داده‌ی متفاوت باشه (مثل عدد و رشته با هم)، متد <code style="direction:ltr;display:inline-block;">sort()</code> خطا می‌ده، چون پایتون نمی‌دونه چطور مثلاً یک رشته رو با یک عدد مقایسه کنه. این متد فقط وقتی خوب کار می‌کنه که همه‌ی اعضای لیست از یک نوع باشن (مثلاً همه عدد یا همه رشته).</div>
+
+    <div class="code-block"><span class="label">index() و count()</span>a = [<span class="num-tok">12</span>, <span class="num-tok">15</span>, <span class="num-tok">14</span>, <span class="num-tok">12</span>]
+
+ind = a.index(<span class="num-tok">12</span>)
+<span class="kw">print</span>(ind)     <span class="comment"># 0 (اولین بار عدد 12 در اندیس 0 دیده شده)</span>
+
+tedad = a.count(<span class="num-tok">15</span>)
+<span class="kw">print</span>(tedad)   <span class="comment"># 1 (عدد 15 فقط یک بار در لیست تکرار شده)</span></div>
+    <div class="output-block"><span class="label">خروجی</span>0
+1</div>
+
+    <div class="tip">💡 <b>نکته‌ی طلایی:</b> فرق <code style="direction:ltr;display:inline-block;">remove()</code> و <code style="direction:ltr;display:inline-block;">pop()</code>: به <code style="direction:ltr;display:inline-block;">remove()</code> «مقدار» می‌دیم (چی رو حذف کن)، ولی به <code style="direction:ltr;display:inline-block;">pop()</code> «اندیس» می‌دیم (کجا رو حذف کن).</div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">🔁 حلقه‌ی while چیه؟</h2>
+    <p>تا الان هر کاری رو فقط یک بار انجام می‌دادیم. ولی گاهی می‌خوایم یک کار رو <b>بارها تکرار</b> کنیم، تا وقتی که یک شرط خاص برقرار باشه. اینجاست که حلقه‌ی <code style="direction:ltr;display:inline-block;">while</code> به کمکمون میاد.</p>
+
+    <div class="code-block"><span class="label">ساختار کلی</span><span class="kw">while</span> condition:
+    <span class="comment"># این بخش تا وقتی شرط True باشه، تکرار می‌شه</span></div>
+
+    <p>یعنی: «تا وقتی این شرط درسته، این کارها رو انجام بده». به محض اینکه شرط <code style="direction:ltr;display:inline-block;">False</code> بشه، حلقه متوقف می‌شه و برنامه از خط بعدش ادامه پیدا می‌کنه.</p>
+
+    <h3>مثال ۱: شرطی که از اول False است</h3>
+    <div class="code-block"><span class="label">کد</span><span class="kw">while</span>(<span class="bool-tok">False</span>):
+    <span class="kw">print</span>(<span class="op">"nima"</span>)</div>
+    <div class="output-block"><span class="label">خروجی</span>(هیچی چاپ نمی‌شه)</div>
+    <p>چون شرط از همون اول <code style="direction:ltr;display:inline-block;">False</code> بوده، پایتون اصلاً وارد حلقه نمی‌شه.</p>
+
+    <h3>مثال ۲: شرطی که از اول False است ولی به شکل دیگه</h3>
+    <div class="code-block"><span class="label">کد</span>n = <span class="num-tok">6</span>
+<span class="kw">while</span>(n&gt;<span class="num-tok">5</span>):
+    <span class="kw">print</span>(<span class="op">"hi"</span>)
+<span class="kw">print</span>(<span class="op">"kharj az halghe"</span>)</div>
+
+    <div class="danger">
+      🚨 <b>هشدار: این یک حلقه‌ی بی‌نهایت (infinite loop) است!</b><br>
+      چون <code style="direction:ltr;display:inline-block;">n</code> همیشه برابر ۶ باقی می‌مونه (هیچ‌جا تغییرش نمی‌دیم)، شرط <code style="direction:ltr;display:inline-block;">n>5</code> همیشه <code style="direction:ltr;display:inline-block;">True</code> می‌مونه و کلمه‌ی <code style="direction:ltr;display:inline-block;">"hi"</code> برای همیشه چاپ می‌شه؛ برنامه هیچ‌وقت به خط <code style="direction:ltr;display:inline-block;">print("kharj az halghe")</code> نمی‌رسه!
+    </div>
+
+    <h3>مثال ۳: چطور یک حلقه‌ی درست بنویسیم؟</h3>
+    <p>برای اینکه حلقه یک روز تموم بشه، باید داخل خودِ حلقه، مقدار متغیری که توی شرط استفاده کردیم رو <b>تغییر بدیم</b>.</p>
+
+    <div class="code-block"><span class="label">کد ناقص (این چیزیه که توی کلاس نوشتیم و باید تکمیلش کنیم)</span>n = <span class="num-tok">1</span>
+<span class="kw">while</span>(n&lt;<span class="num-tok">5</span>):
+    <span class="kw">print</span>(n)
+    n = <span class="comment">???</span>   <span class="comment"># اینجا یادمون رفت مقدار n رو تغییر بدیم!</span>
+
+<span class="kw">print</span>(<span class="op">"kharj az halghe"</span>)</div>
+
+    <div class="warn">⚠️ اگه خط <code style="direction:ltr;display:inline-block;">n = ...</code> رو کامل نکنیم یا فراموش کنیم، این حلقه هم بی‌نهایت می‌شه!</div>
+
+    <div class="code-block"><span class="label">نسخه‌ی درست و کامل</span>n = <span class="num-tok">1</span>
+<span class="kw">while</span>(n&lt;<span class="num-tok">5</span>):
+    <span class="kw">print</span>(n)
+    n = n + <span class="num-tok">1</span>   <span class="comment"># این خط باعث می‌شه یک روز شرط False بشه</span>
+
+<span class="kw">print</span>(<span class="op">"kharj az halghe"</span>)</div>
+    <div class="output-block"><span class="label">خروجی</span>1
+2
+3
+4
+kharj az halghe</div>
+
+    <h3>🔍 این کد چطور مرحله‌به‌مرحله اجرا می‌شه؟</h3>
+    <table>
+      <tr><th>مرحله</th><th>مقدار n</th><th>شرط n&lt;5</th><th>اتفاقی که می‌افته</th></tr>
+      <tr><td>۱</td><td>1</td><td>True</td><td>عدد ۱ چاپ می‌شه، بعد n می‌شه ۲</td></tr>
+      <tr><td>۲</td><td>2</td><td>True</td><td>عدد ۲ چاپ می‌شه، بعد n می‌شه ۳</td></tr>
+      <tr><td>۳</td><td>3</td><td>True</td><td>عدد ۳ چاپ می‌شه، بعد n می‌شه ۴</td></tr>
+      <tr><td>۴</td><td>4</td><td>True</td><td>عدد ۴ چاپ می‌شه، بعد n می‌شه ۵</td></tr>
+      <tr><td>۵</td><td>5</td><td>False</td><td>حلقه متوقف می‌شه و «kharj az halghe» چاپ می‌شه</td></tr>
+    </table>
+
+    <div class="tip">💡 <b>قانون طلایی حلقه‌ی while:</b> همیشه باید یک جایی داخل حلقه، متغیری که توی شرط چک می‌کنیم رو تغییر بدیم؛ وگرنه حلقه هیچ‌وقت تموم نمی‌شه و برنامه گیر می‌کنه (Infinite Loop)! اگه موقع اجرا برنامه‌ت هنگ کرد و چیزی متوقف نشد، اولین چیزی که باید چک کنی همینه.</div>
+
+    <div class="fun-fact">
+      🎯 <b>کجا به کارمون میاد؟</b> حلقه‌ی while خیلی جاها استفاده می‌شه: «تا وقتی رمز اشتباهه، دوباره بپرس»، «تا وقتی جون بازیکن صفر نشده، بازی رو ادامه بده»، «تا وقتی کاربر کلمه‌ی exit رو تایپ نکرده، برنامه رو باز نگه دار».
+    </div>
+  </section>
+
+  <section class="card homework">
+    <h2 class="section-title">📓 تکلیف جلسه هفتم</h2>
+    <p>این تمرین‌ها رو توی یک فایل پایتون بنویس و اجرا کن. مراقب باش همیشه متغیر شرط رو داخل حلقه تغییر بدی تا حلقه‌ی بی‌نهایت نسازی! 💪</p>
+
+    <h3>بخش ۱ — تمرین‌های حلقه‌ی while</h3>
+
+    <div class="task">
+      <b>۱. شمارش تا ۱۰</b>
+      <p>با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">while</code>، اعداد ۱ تا ۱۰ رو یکی‌یکی چاپ کن.</p>
+      <span class="topics">while</span>
+    </div>
+
+    <div class="task">
+      <b>۲. شمارش معکوس</b>
+      <p>با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">while</code>، از عدد ۱۰ شروع کن و تا ۱ به‌صورت نزولی بشمار (۱۰، ۹، ۸، ...، ۱).</p>
+      <span class="topics">while</span>
+    </div>
+
+    <div class="task">
+      <b>۳. جمع اعداد ۱ تا ۱۰۰</b>
+      <p>با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">while</code>، مجموع اعداد ۱ تا ۱۰۰ رو حساب کن و در پایان چاپ کن. (راهنمایی: به یک متغیر برای نگه‌داشتن مجموع نیاز داری که هر بار مقدارش رو با <code style="direction:ltr;display:inline-block;">+=</code> افزایش بدی.)</p>
+      <span class="topics">while</span><span class="topics">عملگرهای تخصیصی</span>
+    </div>
+
+    <div class="task">
+      <b>۴. رمز درست تا سه بار تلاش</b>
+      <p>یک رمز عبور رو داخل کد ذخیره کن. با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">while</code> از کاربر رمز بگیر و تا وقتی رمز اشتباهه، دوباره ازش بخواه (راهنمایی: شرط حلقه می‌تونه چیزی شبیه <code style="direction:ltr;display:inline-block;">while password != correct_password</code> باشه).</p>
+      <span class="topics">while</span><span class="topics">مقایسه</span>
+    </div>
+
+    <div class="task">
+      <b>۵. شمارنده‌ی زوج‌ها</b>
+      <p>با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">while</code> از ۱ تا ۲۰ بشمار، ولی فقط اعداد <b>زوج</b> رو چاپ کن (ترکیب <code style="direction:ltr;display:inline-block;">while</code> با <code style="direction:ltr;display:inline-block;">if</code> و <code style="direction:ltr;display:inline-block;">%</code>).</p>
+      <span class="topics">while</span><span class="topics">if</span><span class="topics">%</span>
+    </div>
+
+    <h3>بخش ۲ — تمرین‌های ترکیبی (لیست + while)</h3>
+
+    <div class="task">
+      <b>۶. خالی کردن لیست با while</b>
+      <p>یک لیست با ۵ عضو دلخواه بساز. با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">while</code> تا وقتی لیست خالی نشده، آخرین عضوش رو با <code style="direction:ltr;display:inline-block;">pop()</code> حذف کن و چاپش کن. (راهنمایی: شرط حلقه می‌تونه <code style="direction:ltr;display:inline-block;">while len(my_list) > 0</code> باشه.)</p>
+      <span class="topics">while</span><span class="topics">لیست‌ها</span><span class="topics">pop</span><span class="topics">len</span>
+    </div>
+
+    <div class="task">
+      <b>۷. پر کردن لیست با while</b>
+      <p>یک لیست خالی بساز. با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">while</code>، ۵ بار از کاربر یک عدد بگیر و هر بار با <code style="direction:ltr;display:inline-block;">append()</code> به لیست اضافه کن. در پایان لیست رو چاپ کن.</p>
+      <span class="topics">while</span><span class="topics">لیست‌ها</span><span class="topics">append</span>
+    </div>
+
+    <div class="task">
+      <b>۸. شمارش تکرار یک عدد خاص</b>
+      <p>یک لیست از ۱۰ عدد دلخواه بساز که بعضی از اعداد توش تکراری باشن. با متد <code style="direction:ltr;display:inline-block;">count()</code> تعداد تکرار یکی از اعداد رو چاپ کن، و با <code style="direction:ltr;display:inline-block;">index()</code> اولین جایگاهی که اون عدد توش دیده شده رو چاپ کن.</p>
+      <span class="topics">لیست‌ها</span><span class="topics">count</span><span class="topics">index</span>
+    </div>
+
+    <h3>بخش ۳ — تمرین‌های ترکیبی (مرور همه‌ی جلسات)</h3>
+
+    <div class="task">
+      <b>۹. حدس عدد ساده</b>
+      <p>یک عدد مخفی رو داخل کد ذخیره کن (مثلاً <code style="direction:ltr;display:inline-block;">secret = 7</code>). با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">while</code> از کاربر بخواه عدد رو حدس بزنه و تا وقتی درست نگفته، دوباره ازش بپرس. وقتی درست حدس زد، پیام «آفرین!» چاپ کن.</p>
+      <span class="topics">while</span><span class="topics">مقایسه</span><span class="topics">if</span>
+    </div>
+
+    <div class="task">
+      <b>۱۰. مرتب‌سازی و نمایش نمرات</b>
+      <p>یک لیست از ۶ نمره‌ی درسی بساز (اعداد نامرتب). با <code style="direction:ltr;display:inline-block;">sort()</code> لیست رو مرتب کن و چاپش کن. بعد با <code style="direction:ltr;display:inline-block;">reverse()</code> ترتیبش رو برعکس کن و دوباره چاپش کن.</p>
+      <span class="topics">لیست‌ها</span><span class="topics">sort</span><span class="topics">reverse</span>
+    </div>
+
+    <div class="task">
+      <b>۱۱. جمع اعضای یک لیست با while</b>
+      <p>یک لیست از ۵ عدد بساز. با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">while</code> و یک متغیر شمارنده (index)، همه‌ی اعضای لیست رو با هم جمع بزن و مجموع رو چاپ کن. (راهنمایی: از <code style="direction:ltr;display:inline-block;">my_list[i]</code> برای دسترسی به هر عضو استفاده کن و هر بار <code style="direction:ltr;display:inline-block;">i</code> رو یکی زیاد کن.)</p>
+      <span class="topics">while</span><span class="topics">لیست‌ها</span><span class="topics">عملگرهای حسابی</span>
+    </div>
+
+    <div class="task">
+      <b>۱۲. چالش نهایی — ماشین حساب امتیاز بازی </b>
+      <p>یک متغیر <code style="direction:ltr;display:inline-block;">score</code> با مقدار اولیه‌ی ۰ و یک لیست خالی به اسم <code style="direction:ltr;display:inline-block;">history</code> بساز. با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">while</code>، ۵ بار از کاربر بپرس چند امتیاز گرفته، اون امتیاز رو به <code style="direction:ltr;display:inline-block;">score</code> اضافه کن (<code style="direction:ltr;display:inline-block;">+=</code>) و همچنین با <code style="direction:ltr;display:inline-block;">append()</code> به <code style="direction:ltr;display:inline-block;">history</code> اضافه کن. در پایان امتیاز کل و لیست تاریخچه‌ی امتیازها رو چاپ کن.</p>
+      <span class="topics">همه‌ی جلسات</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
