@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جلسه هشتم | حلقه‌ی for و لیست‌های تودرتو در پایتون</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink: #ff6fa5;
+    --purple: #8b5cf6;
+    --purple-dark: #6d28d9;
+    --bg: #fdf6fb;
+    --card: #ffffff;
+    --ink: #34213d;
+    --muted: #7a6a85;
+    --code-bg: #2b2140;
+    --code-ink: #f3e8ff;
+    --green: #22c55e;
+    --yellow: #fef3c7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Vazirmatn', sans-serif;
+    background: linear-gradient(180deg, #fff0f7 0%, var(--bg) 300px, var(--bg) 100%);
+    color: var(--ink);
+    line-height: 1.9;
+  }
+  .wrap{max-width: 880px; margin: 0 auto; padding: 24px 20px 80px;}
+
+  header.hero{
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    border-radius: 28px;
+    padding: 40px 30px;
+    text-align:center;
+    color:white;
+    box-shadow: 0 20px 40px -15px rgba(139,92,246,0.5);
+    margin-bottom: 30px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.hero::before{
+    content:"🔁🍌🧺✨";
+    position:absolute;
+    font-size: 90px;
+    opacity:0.15;
+    top:-20px;
+    left:-10px;
+    letter-spacing: 20px;
+  }
+  header.hero h1{
+    font-size: 30px;
+    margin: 0 0 8px;
+    font-weight:800;
+  }
+  header.hero p{
+    margin:0;
+    font-size:16px;
+    opacity:0.95;
+  }
+  .badge{
+    display:inline-block;
+    background: rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 5px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+
+  section.card{
+    background: var(--card);
+    border-radius: 22px;
+    padding: 26px 26px;
+    margin-bottom: 22px;
+    box-shadow: 0 6px 20px -10px rgba(139,92,246,0.25);
+    border: 1px solid #f3e6f5;
+  }
+
+  h2.section-title{
+    font-size: 22px;
+    color: var(--purple-dark);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:0;
+    border-bottom: 2px dashed #f0d9f5;
+    padding-bottom: 12px;
+  }
+  h3{
+    color:#a3268a;
+    font-size:17px;
+    margin-bottom:6px;
+  }
+
+  ul, ol{padding-right: 22px; margin: 10px 0;}
+  li{margin-bottom:6px;}
+
+  table{
+    width:100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 14.5px;
+    overflow:hidden;
+    border-radius: 12px;
+  }
+  th, td{
+    padding: 10px 12px;
+    text-align: center;
+    border-bottom: 1px solid #f0e2f4;
+  }
+  th{
+    background: linear-gradient(90deg, #fbeaf6, #f3e8ff);
+    color: var(--purple-dark);
+    font-weight:700;
+  }
+  tr:nth-child(even){ background: #fdf8fd; }
+  td code, th code{ direction: ltr; display:inline-block; }
+
+  .fun-fact{
+    background: linear-gradient(135deg, #fff0f9, #f3e8ff);
+    border-radius: 16px;
+    padding: 16px 18px;
+    border-right: 4px solid var(--pink);
+    margin: 14px 0;
+  }
+  .fun-fact b{color:#c026a3;}
+
+  .recap{
+    background:#f5f3ff;
+    border-radius:16px;
+    padding:14px 18px;
+    border-right:4px solid var(--purple);
+    margin-bottom:8px;
+    font-size:14.5px;
+  }
+  .recap b{color:var(--purple-dark);}
+
+  .code-block{
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 14px;
+    padding: 16px 18px;
+    font-family: 'Courier New', monospace;
+    font-size: 14.5px;
+    direction: ltr;
+    text-align: left;
+    overflow-x:auto;
+    margin: 10px 0;
+    white-space: pre-wrap;
+    line-height:1.7;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+  }
+  .code-block .label{
+    display:block;
+    font-family:'Vazirmatn',sans-serif;
+    direction: rtl;
+    text-align:right;
+    color: #d8b4fe;
+    font-size:12px;
+    margin-bottom:8px;
+    font-weight:600;
+  }
+  .comment{color:#9ca3af;}
+  .kw{color:#fca5f1;}
+  .num-tok{color:#93c5fd;}
+  .op{color:#fbbf24;}
+  .bool-tok{color:#5eead4;}
+  .fn{color:#67e8f9;}
+
+  .output-block{
+    background:#0f172a;
+    color:#4ade80;
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-family:'Courier New', monospace;
+    font-size:14.5px;
+    direction: ltr;
+    text-align:left;
+    margin: -4px 0 12px;
+    white-space: pre-wrap;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+  }
+  .output-block .label{
+    display:block;
+    font-family:'Vazirmatn',sans-serif;
+    direction: rtl;
+    text-align:right;
+    color:#94a3b8;
+    font-size:12px;
+    margin-bottom:6px;
+    font-weight:600;
+  }
+
+  .tip{
+    background:#ecfdf5;
+    border-right:4px solid var(--green);
+    border-radius:12px;
+    padding:12px 16px;
+    font-size:14.5px;
+    margin:12px 0;
+  }
+  .tip b{color:#16a34a;}
+
+  .warn{
+    background:#fff1f2;
+    border-right:4px solid #fb7185;
+    border-radius:12px;
+    padding:12px 16px;
+    font-size:14.5px;
+    margin:12px 0;
+  }
+  .warn b{color:#e11d48;}
+
+  .activity{
+    background: linear-gradient(135deg,#eef2ff,#fdf4ff);
+    border: 2px dashed var(--purple);
+    border-radius:18px;
+    padding:18px 20px;
+    margin:16px 0;
+  }
+  .activity h3{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--purple-dark);
+  }
+
+  .homework{
+    background: linear-gradient(135deg, #fff7ed, #fef3c7);
+    border: 2px solid #fbbf24;
+    border-radius: 22px;
+    padding: 22px 24px;
+  }
+  .homework h2.section-title{ color:#b45309; border-bottom-color:#fde68a; }
+  .homework h3{ color:#b45309; margin-top:22px; }
+  .homework .task{
+    background:white;
+    border-radius:14px;
+    padding:14px 18px;
+    margin-bottom:12px;
+    border-right:4px solid #f59e0b;
+  }
+  .homework .task b{color:#92400e;}
+  .homework .task .topics{
+    display:inline-block;
+    background:#fef3c7;
+    color:#92400e;
+    font-size:11.5px;
+    padding:2px 10px;
+    border-radius:999px;
+    margin-right:6px;
+    margin-top:6px;
+  }
+
+  .nested-box{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin:16px 0;
+    direction: ltr;
+  }
+  .nested-box .outer-item{
+    background:#faf5ff;
+    border: 2px dashed var(--purple);
+    border-radius:14px;
+    padding:10px 14px;
+    display:flex;
+    gap:6px;
+  }
+  .nested-box .inner-item{
+    background: var(--purple);
+    color:white;
+    border-radius:8px;
+    padding:6px 12px;
+    font-family:'Courier New', monospace;
+    font-weight:700;
+  }
+
+  footer{
+    text-align:center;
+    color: var(--muted);
+    font-size:13px;
+    margin-top:30px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="badge">جلسه ۸ از دوره پایتون 🐍</span>
+    <h1>حلقه‌ی for و لیست‌های تودرتو</h1>
+    <p>جزوه‌ی درسی — ویژه‌ی نوجوانان کنجکاو</p>
+  </header>
+
+  <section class="card">
+    <h2 class="section-title">🔁 یادآوری کوتاه از جلسه‌ی قبل</h2>
+    <div class="recap">
+      توی جلسه‌ی قبل با حلقه‌ی <code style="direction:ltr;display:inline-block;">while</code> آشنا شدیم: «تا وقتی یک شرط درسته، این کار رو تکرار کن». یادته گفتیم اگه فراموش کنیم شرط رو تغییر بدیم، حلقه بی‌نهایت می‌شه؟ 🎯
+    </div>
+    <p>توی این جلسه با نوع دیگه‌ای از حلقه آشنا می‌شیم که خیلی وقت‌ها راحت‌تر و امن‌تره: حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code>. این حلقه مخصوص وقتیه که می‌خوایم روی <b>همه‌ی اعضای یک مجموعه</b> (مثل لیست یا رشته) یکی‌یکی بریم.</p>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">🍌 حلقه‌ی for روی یک لیست</h2>
+    <p>به‌جای اینکه با اندیس (<code style="direction:ltr;display:inline-block;">a[0]</code>, <code style="direction:ltr;display:inline-block;">a[1]</code>, ...) به هر عضو لیست دسترسی پیدا کنیم، حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code> خودش به‌طور خودکار یکی‌یکی روی اعضا می‌ره.</p>
+
+    <div class="code-block"><span class="label">کد</span>a = [<span class="op">"banana"</span>, <span class="op">"apple"</span>, <span class="op">"toot farangi"</span>]
+
+<span class="kw">for</span> i <span class="kw">in</span> a:
+    <span class="kw">print</span>(i)
+    <span class="kw">print</span>(<span class="fn">len</span>(i))</div>
+    <div class="output-block"><span class="label">خروجی</span>banana
+6
+apple
+5
+toot farangi
+12</div>
+
+    <h3>🔍 این کد چیکار می‌کنه؟</h3>
+    <ul>
+      <li><code style="direction:ltr;display:inline-block;">for i in a:</code> یعنی «برای هر عضو داخل لیست <code style="direction:ltr;display:inline-block;">a</code>، اون عضو رو موقتاً داخل متغیر <code style="direction:ltr;display:inline-block;">i</code> بذار».</li>
+      <li>بار اول <code style="direction:ltr;display:inline-block;">i</code> می‌شه <code style="direction:ltr;display:inline-block;">"banana"</code>، بار دوم <code style="direction:ltr;display:inline-block;">"apple"</code>، و همین‌طور تا آخرین عضو.</li>
+      <li>داخل بدنه‌ی حلقه، هم خود عضو رو چاپ کردیم، هم طولش رو با <code style="direction:ltr;display:inline-block;">len()</code>.</li>
+      <li>دیگه لازم نیست بدونیم لیست چند عضو داره — حلقه خودش تا آخر لیست می‌ره و بعد متوقف می‌شه!</li>
+    </ul>
+
+    <div class="tip">💡 <b>نکته:</b> اسم متغیر <code style="direction:ltr;display:inline-block;">i</code> دلخواهه؛ می‌تونستیم به‌جاش <code style="direction:ltr;display:inline-block;">fruit</code> یا هر اسم دیگه‌ای بذاریم.</div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">🔢 حلقه‌ی for با ()range</h2>
+    <p>اگه بخوایم حلقه رو یک تعداد مشخص تکرار کنیم (نه روی یک لیست)، از تابع <code style="direction:ltr;display:inline-block;">range()</code> استفاده می‌کنیم.</p>
+
+    <div class="code-block"><span class="label">کد ۱</span><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num-tok">1</span>, <span class="num-tok">5</span>):
+    <span class="kw">print</span>(i)</div>
+    <div class="output-block"><span class="label">خروجی</span>1
+2
+3
+4</div>
+
+    <div class="code-block"><span class="label">کد ۲</span><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num-tok">5</span>):
+    <span class="kw">print</span>(i)</div>
+    <div class="output-block"><span class="label">خروجی</span>0
+1
+2
+3
+4</div>
+
+    <table>
+      <tr><th>نوشتار</th><th>معنی</th></tr>
+      <tr><td><code>range(n)</code></td><td>از ۰ شروع می‌کنه و تا قبل از n می‌ره</td></tr>
+      <tr><td><code>range(m, n)</code></td><td>از m شروع می‌کنه و تا قبل از n می‌ره</td></tr>
+    </table>
+
+    <div class="warn">⚠️ درست مثل برش لیست و رشته، در <code style="direction:ltr;display:inline-block;">range()</code> هم عدد آخر جزو نتیجه نیست!</div>
+
+    <h3>ساختن لیست با for و append</h3>
+    <p>می‌تونیم از یک حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code> برای ساختن یک لیست جدید استفاده کنیم:</p>
+    <div class="code-block"><span class="label">کد</span>a = []
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num-tok">5</span>):
+    i += <span class="num-tok">1</span>
+    <span class="kw">print</span>(i)
+    a.append(i)
+
+<span class="kw">print</span>(a)</div>
+    <div class="output-block"><span class="label">خروجی</span>1
+2
+3
+4
+5
+[1, 2, 3, 4, 5]</div>
+    <p>چون <code style="direction:ltr;display:inline-block;">range(5)</code> اعداد ۰ تا ۴ رو می‌ده، با <code style="direction:ltr;display:inline-block;">i += 1</code> هر بار یکی به <code style="direction:ltr;display:inline-block;">i</code> اضافه کردیم تا در نهایت لیست <code style="direction:ltr;display:inline-block;">[1, 2, 3, 4, 5]</code> ساخته بشه.</p>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">🛑 خروج زودهنگام از حلقه با break</h2>
+    <p>گاهی می‌خوایم به محض رسیدن به یک شرط خاص، از وسط حلقه بیرون بزنیم و دیگه ادامه ندیم. برای این کار از دستور <code style="direction:ltr;display:inline-block;">break</code> استفاده می‌کنیم.</p>
+
+    <div class="code-block"><span class="label">کد</span>a = [<span class="op">"banana"</span>, <span class="op">"apple"</span>, <span class="op">"toot farangi"</span>]
+
+<span class="kw">for</span> i <span class="kw">in</span> a:
+    <span class="kw">print</span>(i)
+    <span class="kw">if</span>(i==<span class="op">"apple"</span>):
+        <span class="kw">break</span>
+
+<span class="kw">print</span>(a)</div>
+    <div class="output-block"><span class="label">خروجی</span>banana
+apple
+['banana', 'apple', 'toot farangi']</div>
+    <p>به محض اینکه <code style="direction:ltr;display:inline-block;">i</code> برابر <code style="direction:ltr;display:inline-block;">"apple"</code> شد، <code style="direction:ltr;display:inline-block;">break</code> حلقه رو کاملاً متوقف کرد؛ پس <code style="direction:ltr;display:inline-block;">"toot farangi"</code> دیگه چاپ نشد. (توجه کن که خودِ لیست <code style="direction:ltr;display:inline-block;">a</code> دست‌نخورده باقی موند، چون <code style="direction:ltr;display:inline-block;">break</code> فقط حلقه رو متوقف می‌کنه، نه اینکه چیزی رو از لیست حذف کنه.)</p>
+
+    <h3>یک مثال دیگر: کپی کردن تا یک شرط</h3>
+    <div class="code-block"><span class="label">کد</span>a = [<span class="num-tok">1</span>, <span class="num-tok">2</span>, <span class="num-tok">3</span>, <span class="num-tok">4</span>, <span class="num-tok">5</span>]
+b = []
+
+<span class="kw">for</span> i <span class="kw">in</span> a:
+    b.append(i)
+    <span class="kw">if</span>(i==<span class="num-tok">3</span>):
+        <span class="kw">break</span>
+
+<span class="kw">print</span>(a)
+<span class="kw">print</span>(b)</div>
+    <div class="output-block"><span class="label">خروجی</span>[1, 2, 3, 4, 5]
+[1, 2, 3]</div>
+    <p>لیست <code style="direction:ltr;display:inline-block;">b</code> فقط تا جایی که به عدد ۳ رسیدیم پر شد، و لیست اصلی <code style="direction:ltr;display:inline-block;">a</code> همون‌طور که بود باقی موند.</p>
+
+    <div class="fun-fact">
+      🎯 <b>کجا به کارمون میاد؟</b> <code style="direction:ltr;display:inline-block;">break</code> خیلی وقت‌ها برای «جست‌وجو» به کار می‌ره: مثلاً وقتی داری توی یک لیست دنبال یک آیتم می‌گردی و به محض پیداش کردن، دیگه لازم نیست بقیه‌ی لیست رو هم چک کنی.
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">🔤 حلقه‌ی for روی یک رشته</h2>
+    <p>حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code> فقط مخصوص لیست نیست؛ می‌تونیم روی حروف یک رشته هم همین‌طور حلقه بزنیم!</p>
+
+    <div class="code-block"><span class="label">کد</span>a = <span class="op">"banana"</span>
+<span class="kw">for</span> n <span class="kw">in</span> a:
+    <span class="kw">print</span>(n)</div>
+    <div class="output-block"><span class="label">خروجی</span>b
+a
+n
+a
+n
+a</div>
+    <p>همون‌طور که می‌بینی، حلقه یکی‌یکی روی تک‌تک حروف رشته رفت.</p>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">🧺 لیست‌ تودرتو (List of Lists)</h2>
+    <p>یک لیست می‌تونه خودش شامل لیست‌های دیگه هم باشه! به این می‌گیم <b>لیست تودرتو</b> یا «لیست داخل لیست».</p>
+
+    <div class="code-block"><span class="label">کد</span>list_of_list = [[<span class="num-tok">1</span>, <span class="num-tok">2</span>, <span class="num-tok">3</span>], [<span class="num-tok">4</span>, <span class="num-tok">5</span>], [<span class="num-tok">6</span>, <span class="num-tok">7</span>]]</div>
+
+    <div class="nested-box">
+      <div class="outer-item">
+        <span class="inner-item">1</span><span class="inner-item">2</span><span class="inner-item">3</span>
+      </div>
+      <div class="outer-item">
+        <span class="inner-item">4</span><span class="inner-item">5</span>
+      </div>
+      <div class="outer-item">
+        <span class="inner-item">6</span><span class="inner-item">7</span>
+      </div>
+    </div>
+    <p style="text-align:center; font-size:13px; color:var(--muted);">هر کادر بزرگ یک عضو از <code style="direction:ltr;display:inline-block;">list_of_list</code> است که خودش یک لیست کوچک‌تره.</p>
+
+    <h3>دسترسی به عضوهای لیست تودرتو</h3>
+    <div class="code-block"><span class="label">کد</span><span class="kw">print</span>(list_of_list[<span class="num-tok">0</span>])       <span class="comment"># اولین لیست کوچک</span>
+<span class="kw">print</span>(list_of_list[<span class="num-tok">0</span>][<span class="num-tok">0</span>])    <span class="comment"># اولین عضو از اولین لیست کوچک</span></div>
+    <div class="output-block"><span class="label">خروجی</span>[1, 2, 3]
+1</div>
+    <p>با یک اندیس به یک لیست کوچک می‌رسیم، و با اندیس دوم به یک عضو داخل اون لیست کوچک.</p>
+
+    <h3>🔁 حلقه‌ی for تودرتو (Nested for)</h3>
+    <p>برای اینکه روی <b>تک‌تک اعضای تمام لیست‌های کوچک</b> بریم، به دو حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code> تودرتو نیاز داریم.</p>
+
+    <div class="code-block"><span class="label">کد</span>list_of_list = [[<span class="num-tok">1</span>, <span class="num-tok">2</span>, <span class="num-tok">3</span>], [<span class="num-tok">4</span>, <span class="num-tok">5</span>], [<span class="num-tok">6</span>, <span class="num-tok">7</span>]]
+
+<span class="kw">for</span> list <span class="kw">in</span> list_of_list:
+    <span class="kw">print</span>(list)
+    <span class="kw">for</span> x <span class="kw">in</span> list:
+        <span class="kw">print</span>(x)</div>
+    <div class="output-block"><span class="label">خروجی</span>[1, 2, 3]
+1
+2
+3
+[4, 5]
+4
+5
+[6, 7]
+6
+7</div>
+
+    <h3>🔍 این کد چطور کار می‌کنه؟</h3>
+    <ul>
+      <li>حلقه‌ی بیرونی (<code style="direction:ltr;display:inline-block;">for list in list_of_list</code>) یکی‌یکی روی لیست‌های کوچک می‌ره.</li>
+      <li>به ازای هر لیست کوچک، اول خودش چاپ می‌شه.</li>
+      <li>بعد حلقه‌ی داخلی (<code style="direction:ltr;display:inline-block;">for x in list</code>) روی تک‌تک اعضای همون لیست کوچک می‌ره و چاپشون می‌کنه.</li>
+    </ul>
+
+    <div class="warn">⚠️ <b>نکته:</b> توی این مثال از کلمه‌ی <code style="direction:ltr;display:inline-block;">list</code> به‌عنوان اسم متغیر استفاده شده، ولی بهتره این کلمه رو برای اسم متغیر انتخاب نکنیم چون <code style="direction:ltr;display:inline-block;">list</code> یک کلمه‌ی رزرو شده و نام یک تابع آماده‌ی پایتونه. بهتره به‌جاش اسمی مثل <code style="direction:ltr;display:inline-block;">sublist</code> یا <code style="direction:ltr;display:inline-block;">row</code> استفاده کنیم.</div>
+
+    <div class="fun-fact">
+      🎯 <b>کجا به کارمون میاد؟</b> لیست تودرتو خیلی جاها دیده می‌شه: یک جدول (مثل صفحه‌ی شطرنج یا یک بازی سودوکو)، لیست نمرات چند دانش‌آموز، یا حتی یک عکس که از ردیف‌ها و ستون‌های پیکسل تشکیل شده!
+    </div>
+  </section>
+
+  <section class="card homework">
+    <h2 class="section-title">📓 تکلیف جلسه هشتم</h2>
+    <p>این تمرین‌ها رو توی یک فایل پایتون بنویس و اجرا کن. 💪</p>
+
+    <h3>بخش ۱ — تمرین‌های پایه‌ی for</h3>
+
+    <div class="task">
+      <b>۱. چاپ لیست با for</b>
+      <p>یک لیست از ۵ رنگ مورد علاقه بساز و با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code> همه‌شون رو چاپ کن.</p>
+      <span class="topics">for</span><span class="topics">لیست‌ها</span>
+    </div>
+
+    <div class="task">
+      <b>۲. طول هر کلمه</b>
+      <p>یک لیست از ۴ اسم بساز و با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code>، هر اسم رو همراه با طولش (با <code style="direction:ltr;display:inline-block;">len()</code>) چاپ کن.</p>
+      <span class="topics">for</span><span class="topics">len</span>
+    </div>
+
+    <div class="task">
+      <b>۳. جدول ضرب یک عدد</b>
+      <p>با <code style="direction:ltr;display:inline-block;">range(1, 11)</code> جدول ضرب عدد ۷ رو چاپ کن (یعنی ۷×۱ تا ۷×۱۰).</p>
+      <span class="topics">for</span><span class="topics">range</span>
+    </div>
+
+    <div class="task">
+      <b>۴. ساختن لیست مربع‌ها</b>
+      <p>با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code> و <code style="direction:ltr;display:inline-block;">range(1, 6)</code>، یک لیست خالی بساز و مربع هر عدد (<code style="direction:ltr;display:inline-block;">i ** 2</code>) رو با <code style="direction:ltr;display:inline-block;">append()</code> بهش اضافه کن. در پایان لیست رو چاپ کن.</p>
+      <span class="topics">for</span><span class="topics">range</span><span class="topics">append</span>
+    </div>
+
+    <h3>بخش ۲ — تمرین‌های break و رشته</h3>
+
+    <div class="task">
+      <b>۵. توقف در عدد خاص</b>
+      <p>یک لیست از ۱۰ عدد بساز. با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code> اعداد رو یکی‌یکی چاپ کن، ولی به محض رسیدن به اولین عددی که از ۵۰ بزرگ‌تره، با <code style="direction:ltr;display:inline-block;">break</code> حلقه رو متوقف کن.</p>
+      <span class="topics">for</span><span class="topics">break</span><span class="topics">if</span>
+    </div>
+
+    <div class="task">
+      <b>۶. شمارش حروف صدادار</b>
+      <p>یک کلمه از کاربر بگیر. با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code> روی حروف کلمه برو و تعداد حروف صدادار (a, e, i, o, u) رو بشمار و در پایان چاپ کن.</p>
+      <span class="topics">for</span><span class="topics">رشته‌ها</span><span class="topics">if</span>
+    </div>
+
+    <div class="task">
+      <b>۷. پیدا کردن اولین حرف تکراری</b>
+      <p>یک لیست خالی به اسم <code style="direction:ltr;display:inline-block;">seen</code> بساز. با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code> روی حروف یک کلمه برو؛ اگه حرفی از قبل توی <code style="direction:ltr;display:inline-block;">seen</code> بود، چاپش کن و با <code style="direction:ltr;display:inline-block;">break</code> خارج شو، وگرنه با <code style="direction:ltr;display:inline-block;">append()</code> به <code style="direction:ltr;display:inline-block;">seen</code> اضافه‌اش کن.</p>
+      <span class="topics">for</span><span class="topics">break</span><span class="topics">لیست‌ها</span>
+    </div>
+
+    <h3>بخش ۳ — تمرین‌های لیست تودرتو</h3>
+
+    <div class="task">
+      <b>۸. جمع هر زیرلیست</b>
+      <p>یک لیست تودرتو مثل <code style="direction:ltr;display:inline-block;">[[1,2,3],[4,5],[6,7,8]]</code> بساز. با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code> تودرتو، مجموع اعداد هر زیرلیست رو جداگانه حساب و چاپ کن.</p>
+      <span class="topics">for تودرتو</span><span class="topics">لیست تودرتو</span>
+    </div>
+
+    <div class="task">
+      <b>۹. لیست نمرات چند دانش‌آموز</b>
+      <p>یک لیست تودرتو بساز که هر زیرلیست، نمرات یک دانش‌آموز باشه (مثلاً <code style="direction:ltr;display:inline-block;">[[18,19,20],[15,14,16]]</code>). با حلقه‌ی تودرتو همه‌ی نمرات رو چاپ کن.</p>
+      <span class="topics">for تودرتو</span><span class="topics">لیست تودرتو</span>
+    </div>
+
+    <div class="task">
+      <b>۱۰. دسترسی مستقیم به یک عضو خاص</b>
+      <p>با همون لیست تودرتوی تمرین قبل، بدون استفاده از حلقه، فقط با اندیس‌گذاری دوبل (مثل <code style="direction:ltr;display:inline-block;">data[1][0]</code>) دومین نمره‌ی دانش‌آموز اول رو چاپ کن.</p>
+      <span class="topics">لیست تودرتو</span><span class="topics">اندیس‌گذاری</span>
+    </div>
+
+    <h3>بخش ۴ — تمرین‌های ترکیبی (مرور همه‌ی جلسات)</h3>
+
+    <div class="task">
+      <b>۱۱. زوج و فردهای یک لیست</b>
+      <p>یک لیست از ۸ عدد بساز. با حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code> و عملگر <code style="direction:ltr;display:inline-block;">%</code>، دو لیست خالی به اسم <code style="direction:ltr;display:inline-block;">evens</code> و <code style="direction:ltr;display:inline-block;">odds</code> بساز و هر عدد رو با <code style="direction:ltr;display:inline-block;">append()</code> در لیست مناسب بذار. در پایان هر دو لیست رو چاپ کن.</p>
+      <span class="topics">for</span><span class="topics">if</span><span class="topics">append</span><span class="topics">%</span>
+    </div>
+
+    <div class="task">
+      <b>۱۲. ترکیب for و while</b>
+      <p>یک لیست از نمرات بساز. با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code> مجموع نمرات رو حساب کن. سپس با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">while</code> جداگانه، از کاربر بپرس نمرات بیشتری می‌خواد اضافه کنه یا نه (با جواب "yes"/"no") و تا وقتی "yes" می‌گه، نمره‌ی جدید بگیر و به مجموع اضافه کن.</p>
+      <span class="topics">for</span><span class="topics">while</span><span class="topics">لیست‌ها</span>
+    </div>
+
+    <div class="task">
+      <b>۱۳. چالش نهایی — جدول‌سازی با لیست تودرتو ⭐⭐⭐</b>
+      <p>با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code> تودرتو (دو حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code> با <code style="direction:ltr;display:inline-block;">range(1,4)</code>)، یک لیست خالی به اسم <code style="direction:ltr;display:inline-block;">table</code> بساز که در نهایت شامل ۳ زیرلیست باشه، طوری که هر زیرلیست حاصل‌ضرب شماره‌ی ردیف در شماره‌ی ستون باشه (شبیه جدول ضرب ۳ در ۳). در پایان <code style="direction:ltr;display:inline-block;">table</code> رو چاپ کن.</p>
+      <span class="topics">همه‌ی جلسات</span>
+    </div>
+  </section>
+
+
+
+</div>
+</body>
+</html>
