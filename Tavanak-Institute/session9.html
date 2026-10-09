@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جلسه نهم | توابع (Functions) در پایتون</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink: #ff6fa5;
+    --purple: #8b5cf6;
+    --purple-dark: #6d28d9;
+    --bg: #fdf6fb;
+    --card: #ffffff;
+    --ink: #34213d;
+    --muted: #7a6a85;
+    --code-bg: #2b2140;
+    --code-ink: #f3e8ff;
+    --green: #22c55e;
+    --yellow: #fef3c7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Vazirmatn', sans-serif;
+    background: linear-gradient(180deg, #fff0f7 0%, var(--bg) 300px, var(--bg) 100%);
+    color: var(--ink);
+    line-height: 1.9;
+  }
+  .wrap{max-width: 880px; margin: 0 auto; padding: 24px 20px 80px;}
+
+  header.hero{
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    border-radius: 28px;
+    padding: 40px 30px;
+    text-align:center;
+    color:white;
+    box-shadow: 0 20px 40px -15px rgba(139,92,246,0.5);
+    margin-bottom: 30px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.hero::before{
+    content:"⚙️🧩🎁✨";
+    position:absolute;
+    font-size: 90px;
+    opacity:0.15;
+    top:-20px;
+    left:-10px;
+    letter-spacing: 20px;
+  }
+  header.hero h1{ font-size: 30px; margin: 0 0 8px; font-weight:800; }
+  header.hero p{ margin:0; font-size:16px; opacity:0.95; }
+  .badge{
+    display:inline-block;
+    background: rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 5px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+
+  section.card{
+    background: var(--card);
+    border-radius: 22px;
+    padding: 26px 26px;
+    margin-bottom: 22px;
+    box-shadow: 0 6px 20px -10px rgba(139,92,246,0.25);
+    border: 1px solid #f3e6f5;
+  }
+
+  h2.section-title{
+    font-size: 22px;
+    color: var(--purple-dark);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:0;
+    border-bottom: 2px dashed #f0d9f5;
+    padding-bottom: 12px;
+  }
+  h3{ color:#a3268a; font-size:17px; margin-bottom:6px; }
+
+  ul, ol{padding-right: 22px; margin: 10px 0;}
+  li{margin-bottom:6px;}
+
+  table{
+    width:100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 14.5px;
+    overflow:hidden;
+    border-radius: 12px;
+  }
+  th, td{ padding: 10px 12px; text-align: center; border-bottom: 1px solid #f0e2f4; }
+  th{
+    background: linear-gradient(90deg, #fbeaf6, #f3e8ff);
+    color: var(--purple-dark);
+    font-weight:700;
+  }
+  tr:nth-child(even){ background: #fdf8fd; }
+  td code, th code{ direction: ltr; display:inline-block; }
+
+  .fun-fact{
+    background: linear-gradient(135deg, #fff0f9, #f3e8ff);
+    border-radius: 16px;
+    padding: 16px 18px;
+    border-right: 4px solid var(--pink);
+    margin: 14px 0;
+  }
+  .fun-fact b{color:#c026a3;}
+
+  .recap{
+    background:#f5f3ff;
+    border-radius:16px;
+    padding:14px 18px;
+    border-right:4px solid var(--purple);
+    margin-bottom:8px;
+    font-size:14.5px;
+  }
+  .recap b{color:var(--purple-dark);}
+
+  .code-block{
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 14px;
+    padding: 16px 18px;
+    font-family: 'Courier New', monospace;
+    font-size: 14.5px;
+    direction: ltr;
+    text-align: left;
+    overflow-x:auto;
+    margin: 10px 0;
+    white-space: pre-wrap;
+    line-height:1.7;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+  }
+  .code-block .label{
+    display:block;
+    font-family:'Vazirmatn',sans-serif;
+    direction: rtl;
+    text-align:right;
+    color: #d8b4fe;
+    font-size:12px;
+    margin-bottom:8px;
+    font-weight:600;
+  }
+  .comment{color:#9ca3af;}
+  .kw{color:#fca5f1;}
+  .num-tok{color:#93c5fd;}
+  .op{color:#fbbf24;}
+  .bool-tok{color:#5eead4;}
+  .fn{color:#67e8f9;}
+
+  .output-block{
+    background:#0f172a;
+    color:#4ade80;
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-family:'Courier New', monospace;
+    font-size:14.5px;
+    direction: ltr;
+    text-align:left;
+    margin: -4px 0 12px;
+    white-space: pre-wrap;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+  }
+  .output-block .label{
+    display:block;
+    font-family:'Vazirmatn',sans-serif;
+    direction: rtl;
+    text-align:right;
+    color:#94a3b8;
+    font-size:12px;
+    margin-bottom:6px;
+    font-weight:600;
+  }
+  .error-block{
+    background:#3b0d0d;
+    color:#fca5a5;
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-family:'Courier New', monospace;
+    font-size:13.5px;
+    direction: ltr;
+    text-align:left;
+    margin: -4px 0 12px;
+    white-space: pre-wrap;
+  }
+  .error-block .label{
+    display:block;
+    font-family:'Vazirmatn',sans-serif;
+    direction: rtl;
+    text-align:right;
+    color:#f87171;
+    font-size:12px;
+    margin-bottom:6px;
+    font-weight:700;
+  }
+
+  .tip{
+    background:#ecfdf5;
+    border-right:4px solid var(--green);
+    border-radius:12px;
+    padding:12px 16px;
+    font-size:14.5px;
+    margin:12px 0;
+  }
+  .tip b{color:#16a34a;}
+
+  .warn{
+    background:#fff1f2;
+    border-right:4px solid #fb7185;
+    border-radius:12px;
+    padding:12px 16px;
+    font-size:14.5px;
+    margin:12px 0;
+  }
+  .warn b{color:#e11d48;}
+
+  .homework{
+    background: linear-gradient(135deg, #fff7ed, #fef3c7);
+    border: 2px solid #fbbf24;
+    border-radius: 22px;
+    padding: 22px 24px;
+  }
+  .homework h2.section-title{ color:#b45309; border-bottom-color:#fde68a; }
+  .homework h3{ color:#b45309; margin-top:22px; }
+  .homework .task{
+    background:white;
+    border-radius:14px;
+    padding:14px 18px;
+    margin-bottom:12px;
+    border-right:4px solid #f59e0b;
+  }
+  .homework .task b{color:#92400e;}
+  .homework .task .topics{
+    display:inline-block;
+    background:#fef3c7;
+    color:#92400e;
+    font-size:11.5px;
+    padding:2px 10px;
+    border-radius:999px;
+    margin-right:6px;
+    margin-top:6px;
+  }
+
+  .machine{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin:18px 0;
+    flex-wrap:wrap;
+    direction: rtl;
+  }
+  .machine .box{
+    border-radius:14px;
+    padding:12px 18px;
+    font-weight:700;
+    text-align:center;
+    font-size:14px;
+  }
+  .machine .in{ background:#fef3c7; color:#92400e; }
+  .machine .fnbox{ background: linear-gradient(135deg,var(--pink),var(--purple)); color:white; }
+  .machine .out{ background:#dcfce7; color:#166534; }
+  .machine .arrow{ font-size:24px; color:var(--purple); }
+
+  footer{ text-align:center; color: var(--muted); font-size:13px; margin-top:30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="badge">جلسه ۹ از دوره پایتون 🐍</span>
+    <h1>توابع (Functions)</h1>
+    <p>جزوه‌ی درسی</p>
+  </header>
+
+  <section class="card">
+    <h2 class="section-title">🔁 یادآوری کوتاه از جلسه‌ی قبل</h2>
+    <div class="recap">
+      توی جلسه‌ی قبل با حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code>، <code style="direction:ltr;display:inline-block;">range()</code>، <code style="direction:ltr;display:inline-block;">break</code> و لیست‌های تودرتو کار کردیم. حالا که دیگه کدهای طولانی‌تری می‌نویسیم، وقتشه یاد بگیریم چطور کدها رو <b>مرتب و قابل استفاده‌ی مجدد</b> بنویسیم. 🎯
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">🧩 تابع (Function) چیه؟</h2>
+    <p>تابع یعنی <b>یک تکه کد که بهش اسم می‌دیم</b> و هر وقت لازم داشتیم، فقط با صدا زدن اسمش اجراش می‌کنیم. مثل یک دستگاه که یک کار مشخص انجام می‌ده: ورودی می‌گیره، کارش رو می‌کنه و (اگه لازم باشه) نتیجه رو برمی‌گردونه.</p>
+
+    <div class="machine">
+      <div class="box in">📥 ورودی<br>(پارامتر)</div>
+      <div class="arrow">⬅️</div>
+      <div class="box fnbox">⚙️ تابع<br>(کار انجام می‌شه)</div>
+      <div class="arrow">⬅️</div>
+      <div class="box out">📤 خروجی<br>(return)</div>
+    </div>
+
+    <div class="fun-fact">
+      🎯 <b>چرا تابع؟</b> فرض کن یک کد ۵ خطی داری و لازمه ۱۰ جای مختلف برنامه ازش استفاده کنی. به‌جای کپی کردن ۱۰ باره‌ی اون ۵ خط، یک بار تابعش رو می‌نویسی و ۱۰ بار صداش می‌زنی! اگه هم خواستی تغییرش بدی، فقط یک جا رو عوض می‌کنی.
+    </div>
+
+    <p>تا الان خودت هم از تابع استفاده کردی: <code style="direction:ltr;display:inline-block;">print()</code>، <code style="direction:ltr;display:inline-block;">input()</code>، <code style="direction:ltr;display:inline-block;">len()</code> و <code style="direction:ltr;display:inline-block;">int()</code> همه تابع‌های آماده‌ی پایتون هستن. حالا یاد می‌گیریم تابع‌های خودمون رو بسازیم!</p>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">🛠️ تعریف و صدا زدن تابع</h2>
+    <p>برای تعریف تابع از کلمه‌ی <code style="direction:ltr;display:inline-block;">def</code> (مخفف define به معنی «تعریف کن») استفاده می‌کنیم.</p>
+
+    <div class="code-block"><span class="label">کد</span><span class="kw">def</span> niyayesh():
+    <span class="kw">print</span>(<span class="op">"hello!"</span>)
+
+niyayesh()</div>
+    <div class="output-block"><span class="label">خروجی</span>hello!</div>
+
+    <h3>🔍 ساختار تابع</h3>
+    <ul>
+      <li><code style="direction:ltr;display:inline-block;">def</code> کلمه‌ی کلیدی برای ساخت تابعه.</li>
+      <li>بعدش اسم تابع میاد (<code style="direction:ltr;display:inline-block;">niyayesh</code>) و بعد پرانتز <code style="direction:ltr;display:inline-block;">()</code> و دونقطه <code style="direction:ltr;display:inline-block;">:</code></li>
+      <li>خطوط داخل تابع باید <b>تورفتگی (indent)</b> داشته باشن، درست مثل <code style="direction:ltr;display:inline-block;">if</code> و حلقه‌ها.</li>
+      <li>فقط تعریف کردن تابع کافی نیست! برای اجرا شدنش باید با اسمش و پرانتز صداش بزنی: <code style="direction:ltr;display:inline-block;">niyayesh()</code></li>
+    </ul>
+
+    <div class="warn">⚠️ <b>خطای رایج:</b> اگه تابع رو تعریف کنی ولی هیچ‌وقت صداش نزنی، هیچ اتفاقی نمی‌افته! تعریف تابع مثل نوشتن دستور پخت یک غذاست؛ تا آشپزی نکنی، غذایی آماده نمی‌شه.</div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">📥 تابع با پارامتر</h2>
+    <p>می‌تونیم به تابع یک ورودی بدیم تا باهاش کار کنه. به این ورودی <b>پارامتر (Parameter)</b> می‌گیم.</p>
+
+    <div class="code-block"><span class="label">کد</span><span class="kw">def</span> name(name):
+    <span class="kw">print</span>(<span class="op">"hello"</span>, name)
+
+name(<span class="op">"niyayesh"</span>)</div>
+    <div class="output-block"><span class="label">خروجی</span>hello niyayesh</div>
+
+    <p>هر بار که تابع رو با یک مقدار متفاوت صدا بزنیم، نتیجه هم متفاوته:</p>
+    <div class="code-block"><span class="label">کد</span>name(<span class="op">"ali"</span>)
+name(<span class="op">"sara"</span>)</div>
+    <div class="output-block"><span class="label">خروجی</span>hello ali
+hello sara</div>
+
+    <h3>🚫 اگه پارامتر رو ندیم چی می‌شه؟</h3>
+    <div class="code-block"><span class="label">کد</span>name()   <span class="comment"># بدون دادن مقدار!</span></div>
+    <div class="error-block"><span class="label">خطا</span>TypeError: name() missing 1 required positional argument: 'name'</div>
+    <p>پایتون می‌گه: «این تابع یک ورودی لازم داره ولی تو چیزی ندادی!» پس همیشه باید به تعداد پارامترهایی که تابع می‌خواد، مقدار بدیم.</p>
+
+    <div class="tip">💡 <b>اصطلاح:</b> اسمی که موقع <b>تعریف</b> تابع داخل پرانتز می‌نویسیم، «پارامتر» نام داره (<code style="direction:ltr;display:inline-block;">name</code> توی <code style="direction:ltr;display:inline-block;">def name(name)</code>). مقداری که موقع <b>صدا زدن</b> می‌دیم، «آرگومان» نام داره (<code style="direction:ltr;display:inline-block;">"niyayesh"</code>).</div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">📦 تابع با چند پارامتر</h2>
+    <p>یک تابع می‌تونه چند ورودی داشته باشه؛ فقط کافیه با کاما از هم جداشون کنیم. ترتیب مقدارها موقع صدا زدن هم مهمه!</p>
+
+    <div class="code-block"><span class="label">کد</span><span class="kw">def</span> greet(name, age):
+    <span class="kw">print</span>(<span class="op">"hello"</span>, name)
+    <span class="kw">print</span>(<span class="op">"u r "</span>, age, <span class="op">" years old"</span>)
+
+greet(<span class="op">"ali"</span>, <span class="num-tok">3</span>)</div>
+    <div class="output-block"><span class="label">خروجی</span>hello ali
+u r  3  years old</div>
+
+    <div class="tip">💡 <code style="direction:ltr;display:inline-block;">"ali"</code> به پارامتر اول (<code style="direction:ltr;display:inline-block;">name</code>) و <code style="direction:ltr;display:inline-block;">3</code> به پارامتر دوم (<code style="direction:ltr;display:inline-block;">age</code>) می‌رسه. اگه جاشون رو عوض کنیم، نتیجه هم عوض می‌شه!</div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">🎁 خروجی دادن با return</h2>
+    <p>گاهی نمی‌خوایم تابع فقط چیزی چاپ کنه؛ می‌خوایم یک <b>نتیجه به ما پس بده</b> تا بتونیم بعداً ازش استفاده کنیم. برای این کار از <code style="direction:ltr;display:inline-block;">return</code> استفاده می‌کنیم.</p>
+
+    <div class="code-block"><span class="label">کد</span><span class="kw">def</span> sum(a, b):
+    <span class="kw">return</span> a + b
+
+sum(<span class="num-tok">3</span>, <span class="num-tok">6</span>)
+<span class="kw">print</span>(sum(<span class="num-tok">3</span>, <span class="num-tok">9</span>))</div>
+    <div class="output-block"><span class="label">خروجی</span>12</div>
+
+    <h3>🔍 چرا فقط یک خروجی چاپ شد؟</h3>
+    <ul>
+      <li>خط <code style="direction:ltr;display:inline-block;">sum(3, 6)</code> نتیجه‌ی ۹ رو <b>برمی‌گردونه</b>، ولی چون هیچ‌جا چاپش نکردیم یا داخل متغیری نریختیمش، همون‌جا گم می‌شه.</li>
+      <li>خط <code style="direction:ltr;display:inline-block;">print(sum(3, 9))</code> نتیجه‌ی ۱۲ رو برگردوند و <code style="direction:ltr;display:inline-block;">print</code> هم اون رو چاپ کرد.</li>
+    </ul>
+
+    <h3>💾 ذخیره‌ی نتیجه داخل متغیر</h3>
+    <div class="code-block"><span class="label">کد</span>result = sum(<span class="num-tok">3</span>, <span class="num-tok">6</span>)
+<span class="kw">print</span>(result)
+<span class="kw">print</span>(result * <span class="num-tok">2</span>)</div>
+    <div class="output-block"><span class="label">خروجی</span>9
+18</div>
+
+    <h3>⚖️ فرق print و return</h3>
+    <table>
+      <tr><th></th><th><code>print</code></th><th><code>return</code></th></tr>
+      <tr><td>کارش</td><td>مقدار رو فقط روی صفحه نشون می‌ده</td><td>مقدار رو به جایی که تابع صدا زده شده پس می‌ده</td></tr>
+      <tr><td>می‌تونیم بعداً ازش استفاده کنیم؟</td><td>نه</td><td>بله (مثلاً داخل متغیر یا محاسبه)</td></tr>
+      <tr><td>مثال تشبیهی</td><td>بلند خوندن جواب</td><td>نوشتن جواب روی کاغذ و دادن به کسی که پرسیده</td></tr>
+    </table>
+
+    <div class="warn">⚠️ <b>نکته‌ی مهم:</b> بعد از اجرای <code style="direction:ltr;display:inline-block;">return</code>، تابع تموم می‌شه و خطوط بعد از اون اجرا نمی‌شن.</div>
+
+    <div class="warn">⚠️ <b>اسم‌گذاری:</b> اسم <code style="direction:ltr;display:inline-block;">sum</code> قبلاً یک تابع آماده‌ی پایتونه (که مجموع اعضای یک لیست رو حساب می‌کنه). اگه تابع خودمون رو هم <code style="direction:ltr;display:inline-block;">sum</code> بنامیم، تابع اصلی پایتون رو «بازنویسی» می‌کنیم و ممکنه بعداً به مشکل بخوریم. بهتره اسم‌هایی مثل <code style="direction:ltr;display:inline-block;">add</code> یا <code style="direction:ltr;display:inline-block;">my_sum</code> انتخاب کنیم.</div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">⌨️ تابع‌هایی که با کاربر ارتباط می‌گیرن</h2>
+    <p>داخل تابع می‌تونیم از <code style="direction:ltr;display:inline-block;">input()</code> هم استفاده کنیم:</p>
+
+    <div class="code-block"><span class="label">کد</span><span class="kw">def</span> get_num():
+    num = <span class="fn">int</span>(<span class="kw">input</span>(<span class="op">"number?"</span>))
+    <span class="kw">print</span>(num)
+
+get_num()</div>
+    <div class="output-block"><span class="label">خروجی نمونه</span>number?8
+8</div>
+
+    <div class="tip">💡 این تابع عدد رو چاپ می‌کنه، ولی پس نمی‌ده. اگه بخوایم بتونیم بعداً از اون عدد استفاده کنیم، بهتره به‌جای <code style="direction:ltr;display:inline-block;">print(num)</code> بنویسیم <code style="direction:ltr;display:inline-block;">return num</code>.</div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">🧺 تابع که روی لیست کار می‌کنه</h2>
+    <p>می‌تونیم یک لیست رو هم به‌عنوان پارامتر به تابع بدیم و داخل تابع تغییرش بدیم. این مثال یک لیست خالی رو با اعدادی که از کاربر می‌گیره، پر می‌کنه:</p>
+
+    <div class="code-block"><span class="label">کد</span><span class="kw">def</span> listporkon(l, size):
+    length = size
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(length):
+        a = <span class="fn">int</span>(<span class="kw">input</span>(<span class="op">"number?"</span>))
+        l.append(a)
+
+    <span class="kw">print</span>(l)
+
+a = []
+listporkon(a, <span class="num-tok">4</span>)</div>
+    <div class="output-block"><span class="label">خروجی نمونه</span>number?5
+number?2
+number?8
+number?1
+[5, 2, 8, 1]</div>
+
+    <h3>🔍 این کد چیکار می‌کنه؟</h3>
+    <ul>
+      <li>تابع دو ورودی می‌گیره: یک لیست (<code style="direction:ltr;display:inline-block;">l</code>) و تعداد اعدادی که باید پر بشه (<code style="direction:ltr;display:inline-block;">size</code>).</li>
+      <li>با یک حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code> به تعداد <code style="direction:ltr;display:inline-block;">size</code> بار از کاربر عدد می‌گیره و به لیست اضافه می‌کنه.</li>
+      <li>در پایان لیست پر شده رو چاپ می‌کنه.</li>
+      <li>بیرون از تابع، یک لیست خالی به اسم <code style="direction:ltr;display:inline-block;">a</code> ساختیم و به تابع دادیمش؛ بعد از اجرا، لیست <code style="direction:ltr;display:inline-block;">a</code> هم پر شده، چون تابع روی <b>همون لیست</b> کار کرده.</li>
+    </ul>
+
+    <div class="fun-fact">
+      🎯 <b>ترکیب مفاهیم:</b> این تابع کوچیک همه‌ی چیزهایی که یاد گرفتی رو با هم داره: تابع، پارامتر، حلقه‌ی for، range، input، تبدیل نوع داده و append!
+    </div>
+  </section>
+
+  <section class="card homework">
+    <h2 class="section-title">📓 تکلیف جلسه نهم</h2>
+    <p>این تمرین‌ها رو توی یک فایل پایتون بنویس و اجرا کن. یادت باشه هر تابعی که می‌نویسی رو حتماً صدا هم بزنی! 💪</p>
+
+    <h3>بخش ۱ — تابع‌های ساده</h3>
+
+    <div class="task">
+      <b>۱. سلام کردن</b>
+      <p>تابعی به اسم <code style="direction:ltr;display:inline-block;">say_hi</code> بنویس که فقط یک جمله‌ی خوش‌آمدگویی چاپ کنه. تابع رو ۳ بار پشت‌سرهم صدا بزن.</p>
+      <span class="topics">def</span>
+    </div>
+
+    <div class="task">
+      <b>۲. معرفی با پارامتر</b>
+      <p>تابعی به اسم <code style="direction:ltr;display:inline-block;">introduce</code> بنویس که اسم و سرگرمی رو به‌عنوان دو پارامتر بگیره و یک جمله‌ی معرفی با f-string چاپ کنه. با سه ورودی مختلف صداش بزن.</p>
+      <span class="topics">def</span><span class="topics">پارامتر</span><span class="topics">f-string</span>
+    </div>
+
+    <div class="task">
+      <b>۳. مربع یک عدد</b>
+      <p>تابعی به اسم <code style="direction:ltr;display:inline-block;">square</code> بنویس که یک عدد بگیره و مربعش رو با <code style="direction:ltr;display:inline-block;">return</code> برگردونه. نتیجه رو داخل یک متغیر بریز و چاپ کن.</p>
+      <span class="topics">def</span><span class="topics">return</span>
+    </div>
+
+    <div class="task">
+      <b>۴. ماشین‌حساب با توابع جدا</b>
+      <p>چهار تابع بنویس: <code style="direction:ltr;display:inline-block;">add</code>، <code style="direction:ltr;display:inline-block;">subtract</code>، <code style="direction:ltr;display:inline-block;">multiply</code> و <code style="direction:ltr;display:inline-block;">divide</code>. هر کدوم دو عدد بگیره و نتیجه رو برگردونه. دو عدد از کاربر بگیر و نتیجه‌ی هر چهار عملیات رو چاپ کن.</p>
+      <span class="topics">def</span><span class="topics">return</span><span class="topics">عملگرهای حسابی</span>
+    </div>
+
+    <h3>بخش ۲ — تابع و شرط</h3>
+
+    <div class="task">
+      <b>۵. زوج یا فرد با تابع</b>
+      <p>تابعی به اسم <code style="direction:ltr;display:inline-block;">is_even</code> بنویس که یک عدد بگیره و اگه زوج بود <code style="direction:ltr;display:inline-block;">True</code> و در غیر این صورت <code style="direction:ltr;display:inline-block;">False</code> برگردونه. بعد یک عدد از کاربر بگیر و با استفاده از این تابع و <code style="direction:ltr;display:inline-block;">if</code> پیام «زوج» یا «فرد» چاپ کن.</p>
+      <span class="topics">def</span><span class="topics">return</span><span class="topics">if</span><span class="topics">%</span>
+    </div>
+
+    <div class="task">
+      <b>۶. بزرگ‌تر از دو عدد</b>
+      <p>تابعی به اسم <code style="direction:ltr;display:inline-block;">bigger</code> بنویس که دو عدد بگیره و عدد بزرگ‌تر رو برگردونه (با <code style="direction:ltr;display:inline-block;">if/else</code>).</p>
+      <span class="topics">def</span><span class="topics">return</span><span class="topics">if/else</span>
+    </div>
+
+    <div class="task">
+      <b>۷. تعیین رده‌ی سنی</b>
+      <p>تابعی به اسم <code style="direction:ltr;display:inline-block;">age_group</code> بنویس که سن بگیره و رشته‌ی <code style="direction:ltr;display:inline-block;">"child"</code> (زیر ۱۳)، <code style="direction:ltr;display:inline-block;">"teen"</code> (۱۳ تا ۱۷) یا <code style="direction:ltr;display:inline-block;">"adult"</code> (۱۸ به بالا) برگردونه.</p>
+      <span class="topics">def</span><span class="topics">return</span><span class="topics">if/elif/else</span>
+    </div>
+
+    <h3>بخش ۳ — تابع و لیست و حلقه</h3>
+
+    <div class="task">
+      <b>۸. جمع اعضای لیست</b>
+      <p>تابعی به اسم <code style="direction:ltr;display:inline-block;">list_sum</code> بنویس که یک لیست از اعداد بگیره، با حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code> مجموعشون رو حساب کنه و برگردونه. (از تابع آماده‌ی <code style="direction:ltr;display:inline-block;">sum</code> استفاده نکن!)</p>
+      <span class="topics">def</span><span class="topics">for</span><span class="topics">لیست‌ها</span>
+    </div>
+
+    <div class="task">
+      <b>۹. بزرگ‌ترین عدد لیست</b>
+      <p>تابعی به اسم <code style="direction:ltr;display:inline-block;">find_max</code> بنویس که یک لیست از اعداد بگیره و بزرگ‌ترین عدد رو با حلقه و شرط پیدا کنه و برگردونه.</p>
+      <span class="topics">def</span><span class="topics">for</span><span class="topics">if</span><span class="topics">لیست‌ها</span>
+    </div>
+
+    <div class="task">
+      <b>۱۰. شمارنده‌ی حروف صدادار</b>
+      <p>تابعی به اسم <code style="direction:ltr;display:inline-block;">count_vowels</code> بنویس که یک رشته بگیره و تعداد حروف صدادار (a, e, i, o, u) اون رو برگردونه.</p>
+      <span class="topics">def</span><span class="topics">for</span><span class="topics">رشته‌ها</span>
+    </div>
+
+    <div class="task">
+      <b>۱۱. پر کردن لیست از کاربر</b>
+      <p>تابعی شبیه <code style="direction:ltr;display:inline-block;">listporkon</code> که توی کلاس نوشتیم بنویس، ولی این بار تابع یک لیست جدید بسازه، اون رو با اعداد کاربر پر کنه و با <code style="direction:ltr;display:inline-block;">return</code> برگردونه (به‌جای اینکه فقط چاپش کنه).</p>
+      <span class="topics">def</span><span class="topics">return</span><span class="topics">input</span><span class="topics">append</span>
+    </div>
+
+    <h3>بخش ۴ — تمرین‌های ترکیبی و چالشی</h3>
+
+    <div class="task">
+      <b>۱۲. تابع جدول ضرب</b>
+      <p>تابعی به اسم <code style="direction:ltr;display:inline-block;">multiplication_table</code> بنویس که یک عدد بگیره و جدول ضرب اون عدد (۱ تا ۱۰) رو چاپ کنه.</p>
+      <span class="topics">def</span><span class="topics">for</span><span class="topics">range</span>
+    </div>
+
+    <div class="task">
+      <b>۱۳. معکوس کردن رشته</b>
+      <p>تابعی به اسم <code style="direction:ltr;display:inline-block;">reverse_text</code> بنویس که یک رشته بگیره و حروفش رو برعکس برگردونه (مثلاً <code style="direction:ltr;display:inline-block;">"hello"</code> بشه <code style="direction:ltr;display:inline-block;">"olleh"</code>). راهنمایی: می‌تونی با حلقه‌ی <code style="direction:ltr;display:inline-block;">for</code> حروف رو یکی‌یکی به ابتدای یک رشته‌ی جدید اضافه کنی.</p>
+      <span class="topics">def</span><span class="topics">for</span><span class="topics">رشته‌ها</span>
+    </div>
+
+    <div class="task">
+      <b>۱۴. تابع‌های ترکیبی</b>
+      <p>از <code style="direction:ltr;display:inline-block;">list_sum</code> (تمرین ۸) و یک تابع جدید به اسم <code style="direction:ltr;display:inline-block;">average</code> که با کمک اون میانگین یک لیست رو حساب کنه، استفاده کن. یک لیست از ۵ نمره بساز و میانگینش رو چاپ کن. (تابعی که تابع دیگه‌ای رو صدا می‌زنه!)</p>
+      <span class="topics">def</span><span class="topics">return</span><span class="topics">ترکیب توابع</span>
+    </div>
+
+    <div class="task">
+      <b>۱۵. چالش نهایی — مینی‌ماشین‌حساب با منو ⭐⭐⭐</b>
+      <p>با کمک یک حلقه‌ی <code style="direction:ltr;display:inline-block;">while</code>، یک منو بساز: کاربر بتونه انتخاب کنه که می‌خواد جمع، تفریق، ضرب یا خروج رو انتخاب کنه. هر عملیات رو با تابع جداگانه (مثل تمرین ۴) انجام بده. تا وقتی کاربر «خروج» رو انتخاب نکرده، برنامه ادامه پیدا کنه.</p>
+      <span class="topics">همه‌ی جلسات</span>
+    </div>
+  </section>
+
+
+</div>
+</body>
+</html>
